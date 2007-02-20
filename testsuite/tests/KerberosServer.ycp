@@ -1,0 +1,13 @@
+{
+
+// testedfiles: KerberosServer.ycp
+
+include "testsuite.ycp";
+TESTSUITE_INIT([], nil);
+
+import "KerberosServer";
+
+DUMP("KerberosServer::Modified");
+TEST(``(KerberosServer::Modified()), [], nil);
+
+}
