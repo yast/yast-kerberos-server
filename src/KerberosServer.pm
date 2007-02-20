@@ -852,7 +852,13 @@ sub SetupLdapClient
         return 0;
     }
     
-
+    if(!exists $data->{base_config_dn}  ||
+       !defined $data->{base_config_dn} ||
+       $data->{base_config_dn} eq "")
+    {
+        $data->{base_config_dn} = "ou=ldapconfig,".$ldapbasedn;
+    }
+    
     $data->{ldap_domain}   = "$ldapbasedn"; # == basedn
     $data->{start_ldap}    = Boolean(1);
     $data->{ldap_tls}      = Boolean(1);
@@ -1928,14 +1934,15 @@ sub WriteDatabase
         }
         elsif($dbtype eq "ldap")
         {
-            my $reqPackages = [ "krb5-plugin-kdb-ldap"];
-
+            my $reqPackages = Ldap->UpdatedArchPackages(["pam_ldap", "nss_ldap"]);
+            push @{$reqPackages}, "krb5-plugin-kdb-ldap";
+            
             if(!$ldap_use_existing &&
                exists $ldapdb->{ldap_server} &&
                defined $ldapdb->{ldap_server} &&
                $ldapdb->{ldap_server} eq "ldapi://")
             {
-                push @{$reqPackages}, "yast2-ldap-server", "yast2-ca-management";
+                push @{$reqPackages}, "yast2-ldap-server", "yast2-ca-management", "openldap2";
                 
                 $ret = $class->InstallPackages($reqPackages);
                 if(!$ret)
