@@ -22,15 +22,10 @@ Summary:	Configuration of kerberos-server
 %files
 %defattr(-,root,root)
 %dir @yncludedir@/kerberos-server
-%dir /usr/share/SuSEfirewall2
-%dir /usr/share/SuSEfirewall2/services
 @yncludedir@/kerberos-server/*
 @clientdir@/kerberos-server.ycp
-#@clientdir@/kerberos-server_*.ycp
 @moduledir@/KerberosServer.*
-#@moduledir@/KerberosServer2.*
 @desktopdir@/kerberos-server.desktop
 @scrconfdir@/*.scr
 @agentdir@/*
-/usr/share/SuSEfirewall2/services/*
 %doc @docdir@

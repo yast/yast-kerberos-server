@@ -2,10 +2,6 @@
 
 yncludedir = @yncludedir@/kerberos-server
 
-fwsrvdir = /usr/share/SuSEfirewall2/services/
-
-fwsrv_DATA = kdc kadmind
-
 client_DATA =			\
 	kerberos-server.ycp		
 
@@ -26,6 +22,6 @@ kerberos-server:
 	ln -sf . $@
 ycpchook = kerberos-server
 
-EXTRA_DIST = $(client_DATA) $(ynclude_DATA) $(module_DATA) $(desktop_DATA) $(fwsrv_DATA)
+EXTRA_DIST = $(client_DATA) $(ynclude_DATA) $(module_DATA) $(desktop_DATA)
 
 include $(top_srcdir)/Makefile.am.common
