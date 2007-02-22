@@ -1536,6 +1536,7 @@ sub ReadDatabase
             if(defined $domain && $domain ne "")
             {
                 $dbrealm = uc($domain);
+                $db->{key_stash_file} = "/var/lib/kerberos/krb5kdc/.k5.$dbrealm";
             }
             else
             {
