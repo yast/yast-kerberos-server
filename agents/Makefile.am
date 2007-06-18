@@ -1,6 +1,6 @@
 # Makefile.am for kerberos-server/agents
 
-agent_SCRIPTS = ag_kerberos
+agent_SCRIPTS = ag_kerberos ag_kadmin
 
 scrconf_DATA = *.scr
 
