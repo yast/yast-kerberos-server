@@ -333,6 +333,40 @@ sub get_principal
     }
     
     my $ret = call_kadmin($class, "get_principal", $cmd_args, $cmd_input, 2);
+
+    if($args->{cmd_args}->[0] eq "-terse")
+    {
+        my $princ = {};
+        
+        my @p = split('\t', $ret);
+
+        $princ->{princ} = $p[0];
+        $princ->{princ_expire_time} = $p[1];
+        $princ->{last_pwd_change} = $p[2];
+        $princ->{pw_expiration} = $p[3];
+        $princ->{max_life} = $p[4];
+        $princ->{mod_princ} = $p[5];
+        $princ->{mod_date} = $p[6];
+        $princ->{attributes} = $p[7];
+        $princ->{kvno} = $p[8];
+        $princ->{mkvno} = $p[9];
+        $princ->{policy} = $p[10];
+        $princ->{max_renewable_life} = $p[11];
+        $princ->{last_success} = $p[12];
+        $princ->{last_failed} = $p[13];
+        $princ->{fail_auth_count} = $p[14];
+        $princ->{n_key_data} = $p[15];
+        for(my $i = 0; $i < $p[15]; $i++)
+        {
+            $princ->{"key_data_ver_$i"} = $p[15+($i*4)+1];
+            $princ->{"key_data_kvno_$i"} = $p[15+($i*4)+2];
+            $princ->{"key_data_enctype_$i"} = $p[15+($i*4)+3];
+            $princ->{"key_data_salt_$i"} = $p[15+($i*4)+4];
+        }
+
+        return $princ;
+        
+    }
     
     return $ret;
 }
@@ -358,8 +392,8 @@ sub list_principals
     }
     
     my $ret = call_kadmin($class, "list_principals", $cmd_args, $cmd_input, 2);
-    
-    return $ret;
+    my @list = split('\n', $ret);
+    return \@list;
 }
 
 sub add_policy
@@ -458,6 +492,23 @@ sub get_policy
     }
     
     my $ret = call_kadmin($class, "get_policy", $cmd_args, $cmd_input, 2);
+
+    if($args->{cmd_args}->[0] eq "-terse")
+    {
+        my $pol = {};
+        
+        my @p = split('\t', $ret);
+
+        $pol->{policy} = $p[0];
+        $pol->{pw_max_life} = $p[1];
+        $pol->{pw_min_life} = $p[2];
+        $pol->{pw_min_length} = $p[3];
+        $pol->{pw_min_classes} = $p[4];
+        $pol->{pw_history_num} = $p[5];
+        $pol->{policy_refcnt} = $p[6];
+
+        return $pol;
+    }
     
     return $ret;
 }
@@ -483,8 +534,8 @@ sub list_policies
     }
     
     my $ret = call_kadmin($class, "list_policies", $cmd_args, $cmd_input, 2);
-    
-    return $ret;
+    my @list = split('\n', $ret);
+    return \@list;
 }
 
 sub ktadd
@@ -740,6 +791,67 @@ B<cmd_args> - array with arguments for the get_principal command. See kadmin man
 
 B<cmd_input> - array of strings to print to STDIN, e.g. passwords
 
+When the -terse option is given, this function returns a hash with the following keys:
+
+B<princ>
+
+B<princ_expire_time>
+
+B<last_pwd_change>
+
+B<pw_expiration>
+
+B<max_life>
+
+B<mod_princ>
+
+B<mod_date>
+
+B<attributes>
+
+B<kvno>
+
+B<mkvno>
+
+B<policy>
+
+B<max_renewable_life>
+
+B<last_success>
+
+B<last_failed>
+
+B<fail_auth_count>
+
+B<n_key_data>
+
+For every key additional data exists. These key_data fields are enumerated. 
+
+B<key_data_ver_$i>
+
+B<key_data_kvno_$i>
+
+B<key_data_enctype_$i>
+
+B<key_data_salt_$i>
+
+Example:
+
+The first key has the fields:
+
+  key_data_ver_0
+  key_data_kvno_0
+  key_data_enctype_0
+  key_data_slat_0
+
+The second key has the fields:
+
+  key_data_ver_1
+  key_data_kvno_1
+  key_data_enctype_1
+  key_data_slat_1
+
+
 =item *
 B<.list_principals($args)>
 
@@ -748,6 +860,8 @@ $args is a hash which supports the following keys:
 B<cmd_args> - array with arguments for the list_principals command. See kadmin manpage for details.
 
 B<cmd_input> - array of strings to print to STDIN, e.g. passwords
+
+This function returns an array of strings.
 
 =item *
 B<.add_policy($args)>
@@ -785,6 +899,23 @@ B<cmd_args> - array with arguments for the get_policy command. See kadmin manpag
 
 B<cmd_input> - array of strings to print to STDIN, e.g. passwords
 
+When the -terse option is given, this function returns a hash with the following keys:
+
+B<policy>
+
+B<pw_max_life>
+
+B<pw_min_life>
+
+B<pw_min_length>
+
+B<pw_min_classes>
+
+B<pw_history_num>
+
+B<policy_refcnt>
+
+
 =item *
 B<.list_policies($args)>
 
@@ -793,6 +924,8 @@ $args is a hash which supports the following keys:
 B<cmd_args> - array with arguments for the list_policies command. See kadmin manpage for details.
 
 B<cmd_input> - array of strings to print to STDIN, e.g. passwords
+
+This function returns an array of strings.
 
 =item *
 B<.ktadd($args)>

@@ -37,7 +37,7 @@ if(!defined $ret)
     print "ERROR: ".Data::Dumper->Dump([SCR->Error(".kadmin")])."\n";
     exit 1;
 }
-print "Return value:".Data::Dumper->Dump([$ret]);
+print "add_principal:".Data::Dumper->Dump([$ret]);
 
 ###################################################################
 
@@ -50,7 +50,7 @@ if(!defined $ret)
     print "ERROR: ".Data::Dumper->Dump([SCR->Error(".kadmin")])."\n";
     exit 1;
 }
-print "Return value:".Data::Dumper->Dump([$ret]);
+print "modify_principal:".Data::Dumper->Dump([$ret]);
 
 ###################################################################
 
@@ -63,7 +63,20 @@ if(!defined $ret)
     print "ERROR: ".Data::Dumper->Dump([SCR->Error(".kadmin")])."\n";
     exit 1;
 }
-print "Return value:".Data::Dumper->Dump([$ret]);
+print "get_principal:".Data::Dumper->Dump([$ret]);
+
+###################################################################
+
+$args = {
+         "cmd_args" => ["-terse", "ugansert"],
+        };
+$ret = SCR->Execute(".kadmin.get_principal", $args);
+if(!defined $ret)
+{
+    print "ERROR: ".Data::Dumper->Dump([SCR->Error(".kadmin")])."\n";
+    exit 1;
+}
+print "get_principal:".Data::Dumper->Dump([$ret]);
 
 ###################################################################
 
@@ -77,7 +90,7 @@ if(!defined $ret)
     print "ERROR: ".Data::Dumper->Dump([SCR->Error(".kadmin")])."\n";
     exit 1;
 }
-print "Return value:".Data::Dumper->Dump([$ret]);
+print "change_password:".Data::Dumper->Dump([$ret]);
 
 ###################################################################
 
@@ -91,7 +104,7 @@ if(!defined $ret)
     print "ERROR: ".Data::Dumper->Dump([SCR->Error(".kadmin")])."\n";
     exit 1;
 }
-print "Return value:".Data::Dumper->Dump([$ret]);
+print "delete_principal:".Data::Dumper->Dump([$ret]);
 
 
 ###################################################################
@@ -103,11 +116,12 @@ if(!defined $ret)
     print "ERROR: ".Data::Dumper->Dump([SCR->Error(".kadmin")])."\n";
     exit 1;
 }
+print "list_principals:".Data::Dumper->Dump([$ret]);
 
 ###################################################################
 
 $args = {
-         "cmd_args" => ["-maxlife", "3 month", "defaultpol"],
+         "cmd_args" => ["-maxlife", "3 month", "mydefaultpol"],
         };
 $ret = SCR->Execute(".kadmin.add_policy", $args);
 if(!defined $ret)
@@ -115,13 +129,13 @@ if(!defined $ret)
     print "ERROR: ".Data::Dumper->Dump([SCR->Error(".kadmin")])."\n";
     exit 1;
 }
-print "Return value:".Data::Dumper->Dump([$ret]);
+print "add_policy:".Data::Dumper->Dump([$ret]);
 
 
 ###################################################################
 
 $args = {
-         "cmd_args" => ["-minlength", "6", "defaultpol"],
+         "cmd_args" => ["-minlength", "6", "mydefaultpol"],
         };
 $ret = SCR->Execute(".kadmin.modify_policy", $args);
 if(!defined $ret)
@@ -129,7 +143,7 @@ if(!defined $ret)
     print "ERROR: ".Data::Dumper->Dump([SCR->Error(".kadmin")])."\n";
     exit 1;
 }
-print "Return value:".Data::Dumper->Dump([$ret]);
+print "modify_policy:".Data::Dumper->Dump([$ret]);
 
 ###################################################################
 
@@ -140,12 +154,12 @@ if(!defined $ret)
     print "ERROR: ".Data::Dumper->Dump([SCR->Error(".kadmin")])."\n";
     exit 1;
 }
-print "Return value:".Data::Dumper->Dump([$ret]);
+print "list_policies:".Data::Dumper->Dump([$ret]);
 
 ###################################################################
 
 $args = {
-         "cmd_args" => ["defaultpol"],
+         "cmd_args" => ["mydefaultpol"],
         };
 $ret = SCR->Execute(".kadmin.get_policy", $args);
 if(!defined $ret)
@@ -153,13 +167,25 @@ if(!defined $ret)
     print "ERROR: ".Data::Dumper->Dump([SCR->Error(".kadmin")])."\n";
     exit 1;
 }
-print "Return value:".Data::Dumper->Dump([$ret]);
-
+print "get_policy:".Data::Dumper->Dump([$ret]);
 
 ###################################################################
 
 $args = {
-         "cmd_args" => ["-force", "defaultpol"],
+         "cmd_args" => ["-terse", "mydefaultpol"],
+        };
+$ret = SCR->Execute(".kadmin.get_policy", $args);
+if(!defined $ret)
+{
+    print "ERROR: ".Data::Dumper->Dump([SCR->Error(".kadmin")])."\n";
+    exit 1;
+}
+print "get_policy:".Data::Dumper->Dump([$ret]);
+
+###################################################################
+
+$args = {
+         "cmd_args" => ["-force", "mydefaultpol"],
         };
 $ret = SCR->Execute(".kadmin.delete_policy", $args);
 if(!defined $ret)
@@ -167,7 +193,7 @@ if(!defined $ret)
     print "ERROR: ".Data::Dumper->Dump([SCR->Error(".kadmin")])."\n";
     exit 1;
 }
-print "Return value:".Data::Dumper->Dump([$ret]);
+print "delete_policy:".Data::Dumper->Dump([$ret]);
 
 ###################################################################
 
@@ -180,7 +206,7 @@ if(!defined $ret)
     print "ERROR: ".Data::Dumper->Dump([SCR->Error(".kadmin")])."\n";
     exit 1;
 }
-print "Return value:".Data::Dumper->Dump([$ret]);
+print "ktadd:".Data::Dumper->Dump([$ret]);
 
 ###################################################################
 
@@ -193,12 +219,5 @@ if(!defined $ret)
     print "ERROR: ".Data::Dumper->Dump([SCR->Error(".kadmin")])."\n";
     exit 1;
 }
-print "Return value:".Data::Dumper->Dump([$ret]);
-
-
-
-#print Data::Dumper->Dump([$ret])."\n";
-#print "$ret\n";
-
-
+print "ktremove:".Data::Dumper->Dump([$ret]);
 
