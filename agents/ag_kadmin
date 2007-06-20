@@ -663,8 +663,164 @@ sub call_kadmin
 package main;
 ag_kadmin->Run;
 
+=head1 NAME
+
+ag_kadmin
+
+=head1 PREFACE
+
+This agent is an interface to kadmin
+
+=head1 FUNCTIONS
+
+=over 2
+
+=item *
+B<.init($args)>
+
+You have to call this function before you call any other function.
+$args is a hash which supports the following keys:
 
 
+B<enctype> - specify the encryption types to use
+
+B<local> - 1 to use kadmin.local; 0 to use kadmin (remote)
+ 
+B<realm> - specify the REALM to use
+
+B<admin_server> - use the specified admin server <hostname>:<port>
+
+B<princ> - authenticate with the specified principal
+
+B<adminpw> - administrator password
+
+
+=item *
+B<.add_principal($args)>
+
+$args is a hash which supports the following keys:
+
+B<cmd_args> - array with arguments for the add_principal command. See kadmin manpage for details.
+
+B<cmd_input> - array of strings to print to STDIN, e.g. passwords
+
+=item *
+B<.delete_principal($args)>
+
+$args is a hash which supports the following keys:
+
+B<cmd_args> - array with arguments for the delete_principal command. See kadmin manpage for details.
+
+B<cmd_input> - array of strings to print to STDIN, e.g. passwords
+
+=item *
+B<.modify_principal($args)>
+
+$args is a hash which supports the following keys:
+
+B<cmd_args> - array with arguments for the modify_principal command. See kadmin manpage for details.
+
+B<cmd_input> - array of strings to print to STDIN, e.g. passwords
+
+=item *
+B<.change_password($args)>
+
+$args is a hash which supports the following keys:
+
+B<cmd_args> - array with arguments for the change_password command. See kadmin manpage for details.
+
+B<cmd_input> - array of strings to print to STDIN, e.g. passwords
+
+=item *
+B<.get_principal($args)>
+
+$args is a hash which supports the following keys:
+
+B<cmd_args> - array with arguments for the get_principal command. See kadmin manpage for details.
+
+B<cmd_input> - array of strings to print to STDIN, e.g. passwords
+
+=item *
+B<.list_principals($args)>
+
+$args is a hash which supports the following keys:
+
+B<cmd_args> - array with arguments for the list_principals command. See kadmin manpage for details.
+
+B<cmd_input> - array of strings to print to STDIN, e.g. passwords
+
+=item *
+B<.add_policy($args)>
+
+$args is a hash which supports the following keys:
+
+B<cmd_args> - array with arguments for the add_policy command. See kadmin manpage for details.
+
+B<cmd_input> - array of strings to print to STDIN, e.g. passwords
+
+=item *
+B<.delete_policy($args)>
+
+$args is a hash which supports the following keys:
+
+B<cmd_args> - array with arguments for the delete_policy command. See kadmin manpage for details.
+
+B<cmd_input> - array of strings to print to STDIN, e.g. passwords
+
+=item *
+B<.modify_policy($args)>
+
+$args is a hash which supports the following keys:
+
+B<cmd_args> - array with arguments for the modify_policy command. See kadmin manpage for details.
+
+B<cmd_input> - array of strings to print to STDIN, e.g. passwords
+
+=item *
+B<.get_policy($args)>
+
+$args is a hash which supports the following keys:
+
+B<cmd_args> - array with arguments for the get_policy command. See kadmin manpage for details.
+
+B<cmd_input> - array of strings to print to STDIN, e.g. passwords
+
+=item *
+B<.list_policies($args)>
+
+$args is a hash which supports the following keys:
+
+B<cmd_args> - array with arguments for the list_policies command. See kadmin manpage for details.
+
+B<cmd_input> - array of strings to print to STDIN, e.g. passwords
+
+=item *
+B<.ktadd($args)>
+
+$args is a hash which supports the following keys:
+
+B<cmd_args> - array with arguments for the ktadd command. See kadmin manpage for details.
+
+B<cmd_input> - array of strings to print to STDIN, e.g. passwords
+
+
+=item *
+B<.ktremove($args)>
+
+$args is a hash which supports the following keys:
+
+B<cmd_args> - array with arguments for the ktremove command. See kadmin manpage for details.
+
+B<cmd_input> - array of strings to print to STDIN, e.g. passwords
+
+
+
+
+
+
+=cut
+
+1;
 
 
 
