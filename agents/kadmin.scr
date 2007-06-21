@@ -9,9 +9,5 @@
  * Execute kadmin commands.
  */
 .kadmin
-`ag_kadmin (
-  `INIT ($[
-    "debug"      : "1"
-  ])
-)
+`ag_kadmin(`INIT ())
 

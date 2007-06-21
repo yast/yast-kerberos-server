@@ -17,7 +17,6 @@ our @ISA = ("YaST::SCRAgent");
 use IPC::Open3;
 use Data::Dumper;
 
-my $debug = "0";
 my $local = undef;
 my $kadmin_cmd = "/usr/lib/mit/sbin/kadmin";
 my $kadmin_cmd_local = "/usr/lib/mit/sbin/kadmin.local";
@@ -29,16 +28,12 @@ sub OtherCommand
     my $class = shift;
     my ($symbol, $config, @rest) = @_;
     
-    y2milestone ("OtherCommand $symbol");
+    y2debug ("OtherCommand $symbol");
     
     if ($symbol ne "INIT") 
     {
         return $class->SetError(summary=> "The first command must be the configuration.(Seen '$_')",
                                 code => "SCR_INIT_ERR");
-    }
-    else
-    {
-        $debug = $config->{"debug"};
     }
     
     return 1;
@@ -53,7 +48,7 @@ sub Execute
                                                     code => "PARAM_CHECK_FAILED");
     my $ret      = undef;
     
-    y2debug("Execute ARGS: ".Data::Dumper->Dump([$args]));
+    y2debug("Execute '$path' with args: ".Data::Dumper->Dump([$args]));
 
     if($path eq ".init")
     {
