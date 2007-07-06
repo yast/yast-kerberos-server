@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Jul  6 13:17:39 CEST 2007 - mc@suse.de
+
+- version 2.15.1
+- add help texts for advanced configuration parameters 
+- add special widget for default_principal_expiration
+
+-------------------------------------------------------------------
 Tue Feb 20 14:47:19 CET 2007 - mc@suse.de
 
 - initial version 2.15.0 
