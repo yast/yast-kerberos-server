@@ -532,8 +532,7 @@ symbol AdvancedConfiguration(boolean ldap)
 																`VSpacing(0.5),
 																`VBox (
 																	   `ReplacePoint(`id(`replace),
-																					 `RichText(`id(`id_advanced_d), "")),
-																	   `VStretch()
+																					 `RichText(`id(`id_advanced_d), ""))
 																	  )
 															   )
 														 )
@@ -549,9 +548,9 @@ symbol AdvancedConfiguration(boolean ldap)
 	
 	symbol ret = `dummy;
 	
-	while (ret != `back
-		   && ret != `abort
-		   && ret != `next)
+	while (ret != `back  &&
+		   ret != `abort &&
+		   ret != `next)
 	{
 		ret = (symbol) UI::UserInput ();
 
@@ -588,28 +587,7 @@ symbol AdvancedConfiguration(boolean ldap)
 		}
 		else
 		{
-			if (ret == `help)
-			{
-				UI::OpenDialog (`opt(`decorated ),
-								`HBox( `VSpacing(16),
-									  `VBox (
-											 `HSpacing (60),
-											 // popup window header
-											 `Heading (_("Help")),
-											 `VSpacing (0.5),
-											 `RichText (""),
-											 `VSpacing (1.5),
-											 // push button label
-											 `PushButton (`id(`ok), `opt(`default, `key_F10), Label::OKButton())
-											)
-									 )
-							   );
-				
-				UI::SetFocus (`id(`ok));
-				UI::UserInput ();
-				UI::CloseDialog ();
-			}
-			else if (ret == `add)
+			if (ret == `add)
 			{
 				symbol selected = (symbol)UI::QueryWidget(`id(`tree), `CurrentItem);
 				y2milestone ("Add for: %1", selected);
