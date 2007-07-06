@@ -1,7 +1,7 @@
 #! /usr/bin/perl -w
 
 # ------------------------------------------------------------------------------
-# Copyright (c) 2006 Novell, Inc. All Rights Reserved.
+# Copyright (c) 2006,2007 Novell, Inc. All Rights Reserved.
 #
 #
 # This program is free software; you can redistribute it and/or modify it under
@@ -744,14 +744,17 @@ sub SetupLdapServer
     
     my $schemas = LdapServer->ReadSchemaIncludeList();
     
-    push @{$schemas}, "/usr/share/doc/packages/krb5/kerberos.schema";
-    $ret = LdapServer->WriteSchemaIncludeList($schemas);
-    if(! $ret)
+    if( !grep( ($_ =~ /kerberos.schema/), @{$schemas}))
     {
-        y2error("LdapServer => WriteSchemaIncludeList call failed");
-        return 0;
+        push @{$schemas}, "/usr/share/doc/packages/krb5/kerberos.schema";
+        $ret = LdapServer->WriteSchemaIncludeList($schemas);
+        if(! $ret)
+        {
+            y2error("LdapServer => WriteSchemaIncludeList call failed");
+            return 0;
+        }
     }
-
+    
     $ret = LdapServer->WriteConfigureCommonServerCertificate(1);
     if(! $ret)
     {
@@ -2170,7 +2173,7 @@ sub Write
     # KerberosServer read dialog caption
     my $caption = __("Saving kerberos-server Configuration");
 
-    my $steps = 1;
+    my $steps = 2;
 
     my $sl = 1.0;
     sleep($sl);
@@ -2178,22 +2181,31 @@ sub Write
     # We do not set help text here, because it was set outside
     Progress->New($caption, " ", $steps, [
 	    # Progress stage 1/2
-	    __("Write the settings"),
+	    __("Write Firewall settings"),
+	    # Progress stage 2/2
+	    __("Write Kerberos settings"),
 	], [
 	    # Progress step 1/2
-	    __("Writing the settings..."),
+	    __("Writing Firewall settings..."),
+	    # Progress step 2/2
+	    __("Writing Kerberos settings..."),
 	    # Progress finished
 	    __("Finished")
-	],
-	""
+       ],
+       ""
     );
 
-    # write settings
+    # Write Firewall settings
     Progress->NextStage();
 
     my $progress_orig = Progress->set(0);
     SuSEFirewall->Write();
     Progress->set($progress_orig);
+
+    sleep($sl);
+    
+    # write Kerberos settings
+    Progress->NextStage();
 
     my $ret = $class->WriteDatabase();
     
