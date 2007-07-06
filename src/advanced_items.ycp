@@ -116,18 +116,18 @@ define void get_adv_default_principal_flags() ``{
 	
 	string flags = KerberosServer::getDBvalue("default_principal_flags");
 	
-	UI::ChangeWidget(`id(`kdc_flags_allow_postdated), `Value, (issubstring (flags, "-allow_postdated"))?false:true);
-	UI::ChangeWidget(`id(`kdc_flags_allow_forwardable), `Value, (issubstring (flags, "-allow_forwardable"))?false:true );
-	UI::ChangeWidget(`id(`kdc_flags_allow_renewable), `Value, (issubstring (flags, "-allow_renewable"))?false:true);
-	UI::ChangeWidget(`id(`kdc_flags_allow_proxiable), `Value,(issubstring (flags, "-allow_proxiable"))?false:true );
-	UI::ChangeWidget(`id(`kdc_flags_allow_dup_skey), `Value, (issubstring (flags, "-allow_dup_skey"))?false:true);
-	UI::ChangeWidget(`id(`kdc_flags_requires_preauth), `Value, (issubstring (flags, "+requires_preauth"))?true:false);
-	UI::ChangeWidget(`id(`kdc_flags_requires_hwauth), `Value, (issubstring (flags, "+requires_hwauth"))?true:false);
-	UI::ChangeWidget(`id(`kdc_flags_allow_svr), `Value, (issubstring (flags, "-allow_svr"))?false:true );
-	UI::ChangeWidget(`id(`kdc_flags_allow_tgs_req), `Value, (issubstring (flags, "-allow_tgs_req"))?false:true);
-	UI::ChangeWidget(`id(`kdc_flags_allow_tix), `Value, (issubstring (flags, "-allow_tix"))?false:true);
-	UI::ChangeWidget(`id(`kdc_flags_needchange), `Value, (issubstring (flags, "+needchange"))?true:false);
-	UI::ChangeWidget(`id(`kdc_flags_password_changing_service), `Value, (issubstring (flags, "+password_changing_service"))?true:false);
+	UI::ChangeWidget(`id(`kdc_flags_allow_postdated), `Value, (issubstring (flags, "-postdateable"))?false:true);
+	UI::ChangeWidget(`id(`kdc_flags_allow_forwardable), `Value, (issubstring (flags, "-forwardable"))?false:true );
+	UI::ChangeWidget(`id(`kdc_flags_allow_renewable), `Value, (issubstring (flags, "-renewable"))?false:true);
+	UI::ChangeWidget(`id(`kdc_flags_allow_proxiable), `Value,(issubstring (flags, "-proxiable"))?false:true );
+	UI::ChangeWidget(`id(`kdc_flags_allow_dup_skey), `Value, (issubstring (flags, "-dup-skey"))?false:true);
+	UI::ChangeWidget(`id(`kdc_flags_requires_preauth), `Value, (issubstring (flags, "+preauth"))?true:false);
+	UI::ChangeWidget(`id(`kdc_flags_requires_hwauth), `Value, (issubstring (flags, "+hwauth"))?true:false);
+	UI::ChangeWidget(`id(`kdc_flags_allow_svr), `Value, (issubstring (flags, "-service"))?false:true );
+	UI::ChangeWidget(`id(`kdc_flags_allow_tgs_req), `Value, (issubstring (flags, "-tgt-based"))?false:true);
+	UI::ChangeWidget(`id(`kdc_flags_allow_tix), `Value, (issubstring (flags, "-allow-tickets"))?false:true);
+	UI::ChangeWidget(`id(`kdc_flags_needchange), `Value, (issubstring (flags, "+pwchange"))?true:false);
+	UI::ChangeWidget(`id(`kdc_flags_password_changing_service), `Value, (issubstring (flags, "+pwservice"))?true:false);
 }
 
 define void set_adv_default_principal_flags() ``{
@@ -136,64 +136,64 @@ define void set_adv_default_principal_flags() ``{
 	string flags = "";
 
 	if((boolean) UI::QueryWidget(`id(`kdc_flags_allow_postdated), `Value)) {
-		flags = flags + "+allow_postdated ";
+		flags = flags + "+postdateable ";
 	} else {
-		flags = flags + "-allow_postdated ";
+		flags = flags + "-postdateable ";
 	}
 	if((boolean) UI::QueryWidget(`id(`kdc_flags_allow_forwardable), `Value)) {
-		flags = flags + "+allow_forwardable ";
+		flags = flags + "+forwardable ";
 	} else {
-		flags = flags + "-allow_forwardable ";
+		flags = flags + "-forwardable ";
 	}
 	if((boolean) UI::QueryWidget(`id(`kdc_flags_allow_renewable), `Value)) {
-		flags = flags + "+allow_renewable ";
+		flags = flags + "+renewable ";
 	} else {
-		flags = flags + "-allow_renewable ";
+		flags = flags + "-renewable ";
 	}
 	if((boolean) UI::QueryWidget(`id(`kdc_flags_allow_proxiable), `Value)) {
-		flags = flags + "+allow_proxiable ";
+		flags = flags + "+proxiable ";
 	} else {
-		flags = flags + "-allow_proxiable ";
+		flags = flags + "-proxiable ";
 	}
 	if((boolean) UI::QueryWidget(`id(`kdc_flags_allow_dup_skey), `Value)) {
-		flags = flags + "+allow_dup_skey ";
+		flags = flags + "+dup-skey ";
 	} else {
-		flags = flags + "-allow_dup_skey ";
+		flags = flags + "-dup-skey ";
 	}
 	if((boolean) UI::QueryWidget(`id(`kdc_flags_requires_preauth), `Value)) {
-		flags = flags + "+requires_preauth ";
+		flags = flags + "+preauth ";
 	} else {
-		flags = flags + "-requires_preauth ";
+		flags = flags + "-preauth ";
 	}
 	if((boolean) UI::QueryWidget(`id(`kdc_flags_requires_hwauth), `Value)) {
-		flags = flags + "+requires_hwauth ";
+		flags = flags + "+hwauth ";
 	} else {
-		flags = flags + "-requires_hwauth ";
+		flags = flags + "-hwauth ";
 	}
 	if((boolean) UI::QueryWidget(`id(`kdc_flags_allow_svr), `Value)) {
-		flags = flags + "+allow_svr ";
+		flags = flags + "+service ";
 	} else {
-		flags = flags + "-allow_svr ";
+		flags = flags + "-service ";
 	}
 	if((boolean) UI::QueryWidget(`id(`kdc_flags_allow_tgs_req), `Value)) {
-		flags = flags + "+allow_tgs_req ";
+		flags = flags + "+tgt-based ";
 	} else {
-		flags = flags + "-allow_tgs_req ";
+		flags = flags + "-tgt-based ";
 	}
 	if((boolean) UI::QueryWidget(`id(`kdc_flags_allow_tix), `Value)) {
-		flags = flags + "+allow_tix ";
+		flags = flags + "+allow-tickets ";
 	} else {
-		flags = flags + "-allow_tix ";
+		flags = flags + "-allow-tickets ";
 	}
 	if((boolean) UI::QueryWidget(`id(`kdc_flags_needchange), `Value)) {
-		flags = flags + "+needchange ";
+		flags = flags + "+pwchange ";
 	} else {
-		flags = flags + "-needchange ";
+		flags = flags + "-pwchange ";
 	}
 	if((boolean) UI::QueryWidget(`id(`kdc_flags_password_changing_service), `Value)) {
-		flags = flags + "+password_changing_service ";
+		flags = flags + "+pwservice ";
 	} else {
-		flags = flags + "-password_changing_service ";
+		flags = flags + "-pwservice ";
 	}
 	
 	KerberosServer::setDBvalue("default_principal_flags", flags);
