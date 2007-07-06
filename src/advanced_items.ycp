@@ -68,15 +68,45 @@ define void set_adv_admin_keytab() ``{
 // #################################################################################
 
 define void get_adv_default_principal_expiration() ``{
-	y2debug("calling get_adv_default_principal_expiration");
+	y2milestone("calling get_adv_default_principal_expiration");
 	
-	UI::ChangeWidget(`id(`id_default_principal_expiration), `Value, KerberosServer::getDBvalue("default_principal_expiration"));
+	string datetime = KerberosServer::getDBvalue("default_principal_expiration");
+
+	y2milestone("get: datetime = %1", datetime);
+	
+	UI::ChangeWidget(`id(`id_default_principal_expiration_available), `Value, (datetime == "")?false:true);
+
+	list<string> dt = KerberosServer::decodeDateTime(datetime);
+	
+	UI::ChangeWidget(`id(`id_default_principal_expiration_date), `Value, dt[0]:"2007-01-01");
+	UI::ChangeWidget(`id(`id_default_principal_expiration_time), `Value, dt[1]:"00:00:00");
+
+	UI::ChangeWidget(`id(`id_default_principal_expiration_date),
+					 `Enabled, (KerberosServer::getDBvalue("default_principal_expiration") == "")?false:true);
+	UI::ChangeWidget(`id(`id_default_principal_expiration_time),
+					 `Enabled, (KerberosServer::getDBvalue("default_principal_expiration") == "")?false:true);
 }
 
 define void set_adv_default_principal_expiration() ``{
-	y2debug("calling set_adv_default_principal_expiration");
-	
-	KerberosServer::setDBvalue("default_principal_expiration",(string) UI::QueryWidget(`id(`id_default_principal_expiration), `Value));
+	y2milestone("calling set_adv_default_principal_expiration");
+
+	if((boolean) UI::QueryWidget(`id(`id_default_principal_expiration_available), `Value) == false)
+	{
+		y2milestone("checkbox is off");
+		KerberosServer::setDBvalue("default_principal_expiration", "");
+	}
+	else
+	{
+		y2milestone("checkbox is on");
+		string Date = (string) UI::QueryWidget(`id(`id_default_principal_expiration_date), `Value);
+		string Time = (string) UI::QueryWidget(`id(`id_default_principal_expiration_time), `Value);
+		
+		string datetime = KerberosServer::encodeDateTime(Date, Time);
+
+		y2milestone("set: datetime = %1", datetime);
+		
+		KerberosServer::setDBvalue("default_principal_expiration", datetime);
+	}
 }
 
 // #################################################################################
@@ -757,12 +787,23 @@ define map itemMap = $[
 										],
 					   `default_principal_expiration : $["name"   : _("Default Principal Expiration"),
 														 "widget" : `Frame ("",
-																			`VBox(`TextEntry(`id(`id_default_principal_expiration),"",
-																							 KerberosServer::getDBvalue("default_principal_expiration")),
+																			`VBox(`Left(`CheckBox(`id(`id_default_principal_expiration_available), `opt(`notify),
+																								  // checkbox text
+																								  _("Available"), true)),
+																				  `HBox(`Date(`id(`id_default_principal_expiration_date),
+																							  _("Date")),
+																						`Time(`id(`id_default_principal_expiration_time),
+																							  _("Time"))
+																					   ),
+																				  /*
+																					 
+																				  `TextEntry(`id(`id_default_principal_expiration),"",
+																				  KerberosServer::getDBvalue("default_principal_expiration")), */
 																				  `VSpacing(1.5),
 																				  `RichText( HELPS["adv_default_principal_expiration"]:"")
 																				 )
 																		   ),
+														 "default"     : ``(get_adv_default_principal_expiration()),
 														 "getCallback" : ``(get_adv_default_principal_expiration()),
 														 "setCallback" : ``(set_adv_default_principal_expiration())
 														],
