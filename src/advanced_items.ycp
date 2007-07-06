@@ -725,7 +725,8 @@ define map itemMap = $[
 															 `VBox(`TextEntry(`id(`id_database_name),
 																			  _("&Database Path"),
 																			  KerberosServer::getDBvalue("database_name")),
-																   `VSpacing(1.5)
+																   `VSpacing(1.5),
+																   `RichText( HELPS["adv_database_name"]:"")
 																  )
 															),
 										  "getCallback" : ``(get_adv_database_name()),
@@ -736,7 +737,8 @@ define map itemMap = $[
 														`VBox(`TextEntry(`id(`id_acl_file),
 																		 _("ACL &File"),
 																		 KerberosServer::getDBvalue("acl_file")),
-															  `VSpacing(1.5)
+															  `VSpacing(1.5),
+															  `RichText( HELPS["adv_acl_file"]:"")
 															 )
 													   ),
 									 "getCallback" : ``(get_adv_acl_file()),
@@ -746,7 +748,8 @@ define map itemMap = $[
 										 "widget" : `Frame ("",
 															`VBox(`TextEntry(`id(`id_admin_keytab),"",
 																			 KerberosServer::getDBvalue("admin_keytab")),
-																  `VSpacing(1.5)
+																  `VSpacing(1.5),
+																  `RichText( HELPS["adv_admin_keytab"]:"")
 																 )
 														   ),
 										 "getCallback" : ``(get_adv_admin_keytab()),
@@ -756,7 +759,8 @@ define map itemMap = $[
 														 "widget" : `Frame ("",
 																			`VBox(`TextEntry(`id(`id_default_principal_expiration),"",
 																							 KerberosServer::getDBvalue("default_principal_expiration")),
-																				  `VSpacing(1.5)
+																				  `VSpacing(1.5),
+																				  `RichText( HELPS["adv_default_principal_expiration"]:"")
 																				 )
 																		   ),
 														 "getCallback" : ``(get_adv_default_principal_expiration()),
@@ -786,19 +790,22 @@ define map itemMap = $[
 																			   // checkbox text in MultiSelectionBox
 																			   _("Requires hwauth"), false)),
 															   // checkbox text in MultiSelectionBox
-															   `Left(`CheckBox(`id (`kdc_flags_allow_svr), _("Allow svr"), false)),
+															   `Left(`CheckBox(`id (`kdc_flags_allow_svr),
+																			   _("Allow service"), false)),
 															   `Left(`CheckBox(`id (`kdc_flags_allow_tgs_req),
 																			   // checkbox text in MultiSelectionBox
 																			   _("Allow tgs request"), false)),
 															   // checkbox text in MultiSelectionBox
-															   `Left(`CheckBox(`id (`kdc_flags_allow_tix), _("Allow tix"), false)),
+															   `Left(`CheckBox(`id (`kdc_flags_allow_tix),
+																			   _("Allow tickets"), false)),
 															   `Left(`CheckBox(`id (`kdc_flags_needchange),
 																			   // checkbox text in MultiSelectionBox
 																			   _("Needchange"), false)),
 															   `Left(`CheckBox(`id (`kdc_flags_password_changing_service),
 																			   // checkbox text in MultiSelectionBox
 																			   _("Password changing service"), false)),
-															   `VSpacing(1.5)
+															   `VSpacing(1.5),
+															   `RichText( HELPS["adv_default_principal_flags"]:"")
 															  )
 														),
 													"default"     : ``(get_adv_default_principal_flags()),
@@ -809,7 +816,8 @@ define map itemMap = $[
 									  "widget" : `Frame ("",
 														 `VBox(`TextEntry(`id(`id_dict_file), "",
 																		  KerberosServer::getDBvalue("dict_file")),
-															   `VSpacing(1.5)
+															   `VSpacing(1.5),
+															   `RichText( HELPS["adv_dict_file"]:"")
 															  )
 														),
 									  "getCallback" : ``(get_adv_dict_file()),
@@ -819,7 +827,8 @@ define map itemMap = $[
 										 "widget" : `Frame ("",
 															`VBox(`TextEntry(`id(`id_kadmind_port), "",
 																			 KerberosServer::getDBvalue("kadmind_port")),
-																  `VSpacing(1.5)
+																  `VSpacing(1.5),
+																  `RichText( HELPS["adv_kadmind_port"]:"")
 																 )
 														   ),
 										 "getCallback" : ``(get_adv_kadmind_port()),
@@ -829,7 +838,8 @@ define map itemMap = $[
 										 "widget" : `Frame ("",
 															`VBox(`TextEntry(`id(`id_kpasswd_port), "",
 																			 KerberosServer::getDBvalue("kpasswd_port")),
-																  `VSpacing(1.5)
+																  `VSpacing(1.5),
+																  `RichText( HELPS["adv_kpasswd_port"]:"")
 																 )
 														   ),
 										 "getCallback" : ``(get_adv_kpasswd_port()),
@@ -839,7 +849,8 @@ define map itemMap = $[
 										   "widget" : `Frame ("",
 															  `VBox(`TextEntry(`id(`id_key_stash_file), "",
 																			   KerberosServer::getDBvalue("key_stash_file")),
-																	`VSpacing(1.5)
+																	`VSpacing(1.5),
+																	`RichText( HELPS["adv_key_stash_file"]:"")
 																   )
 															 ),
 										   "getCallback" : ``(get_adv_key_stash_file()),
@@ -849,7 +860,8 @@ define map itemMap = $[
 									  "widget" : `Frame ("",
 														 `VBox(`TextEntry(`id(`id_kdc_ports), "",
 																		  KerberosServer::getDBvalue("kdc_ports")),
-															   `VSpacing(1.5)
+															   `VSpacing(1.5),
+															   `RichText( HELPS["adv_kdc_ports"]:"")
 															  )
 														),
 									  "getCallback" : ``(get_adv_kdc_ports()),
@@ -859,7 +871,8 @@ define map itemMap = $[
 											"widget" : `Frame ("",
 															   `VBox(`TextEntry(`id(`id_master_key_name), "",
 																				KerberosServer::getDBvalue("master_key_name")),
-																	 `VSpacing(1.5)
+																	 `VSpacing(1.5),
+																	 `RichText( HELPS["adv_master_key_name"]:"")
 																	)
 															  ),
 											"getCallback" : ``(get_adv_master_key_name()),
@@ -869,7 +882,8 @@ define map itemMap = $[
 											"widget" : `Frame ("",
 															   `VBox(`TextEntry(`id(`id_master_key_type), "",
 																				KerberosServer::getDBvalue("master_key_type")),
-																	 `VSpacing(1.5)
+																	 `VSpacing(1.5),
+																	 `RichText( HELPS["adv_master_key_type"]:"")
 																	)
 															  ),
 											"getCallback" : ``(get_adv_master_key_type()),
@@ -885,7 +899,9 @@ define map itemMap = $[
 																			  0, 365, 0),
 																	`Time(`id(`id_max_life_time),
 																		  _("Time"))
-																   )
+																   ),
+															  `VSpacing(1.5),
+															  `RichText( HELPS["adv_max_life"]:"")
 															 )
 													   ),
 									 "default"     : ``(get_adv_max_life()),
@@ -902,7 +918,9 @@ define map itemMap = $[
 																						0, 365, 0),
 																			  `Time(`id(`id_max_renewable_life_time),
 																					_("Time"))
-																			 )
+																			 ),
+																		`VSpacing(1.5),
+																		`RichText( HELPS["adv_max_renew_life"]:"")
 																	   )
 																 ),
 											   "default"     : ``(get_adv_max_renewable_life()),
@@ -913,7 +931,8 @@ define map itemMap = $[
 											   "widget" : `Frame ("",
 																  `VBox(`TextEntry(`id(`id_supported_enctypes), "",
 																				   KerberosServer::getDBvalue("supported_enctypes")),
-																		`VSpacing(1.5)
+																		`VSpacing(1.5),
+																		`RichText( HELPS["adv_supported_enctypes"]:"")
 																	   )
 																 ),
 											   "getCallback" : ``(get_adv_supported_enctypes()),
@@ -923,7 +942,8 @@ define map itemMap = $[
 												   "widget" : `Frame ("",
 																	  `VBox(`TextEntry(`id(`id_kdc_supported_enctypes), "",
 																					   KerberosServer::getDBvalue("kdc_supported_enctypes")),
-																			`VSpacing(1.5)
+																			`VSpacing(1.5),
+																			`RichText( HELPS["adv_kdc_supported_enctypes"]:"")
 																		   )
 																	 ),
 												   "getCallback" : ``(get_adv_kdc_supported_enctypes()),
@@ -933,7 +953,8 @@ define map itemMap = $[
 											   "widget" : `Frame ("",
 																  `VBox(`TextEntry(`id(`id_reject_bad_transit), "",
 																				   KerberosServer::getDBvalue("reject_bad_transit")),
-																		`VSpacing(1.5)
+																		`VSpacing(1.5),
+																		`RichText( HELPS["adv_reject_bad_transit"]:"")
 																	   )
 																 ),
 											   "getCallback" : ``(get_adv_reject_bad_transit()),
@@ -943,7 +964,8 @@ define map itemMap = $[
 												  "widget" : `Frame ("",
 																	 `VBox(`TextEntry(`id(`id_ldap_conns_per_server), "",
 																					  KerberosServer::getLdapDBvalue("ldap_conns_per_server")),
-																		   `VSpacing(1.5)
+																		   `VSpacing(1.5),
+																		   `RichText( HELPS["adv_ldap_conns_per_server"]:"")
 																		  )
 																	),
 												  "getCallback" : ``(get_adv_ldap_conns_per_server()),
@@ -953,7 +975,8 @@ define map itemMap = $[
 												  "widget" : `Frame ("",
 																	 `VBox(`TextEntry(`id(`id_ldap_service_password_file), "",
 																					  KerberosServer::getLdapDBvalue("ldap_service_password_file")),
-																		   `VSpacing(1.5)
+																		   `VSpacing(1.5),
+																		   `RichText( HELPS["adv_ldap_service_password_file"]:"")
 																		  )
 																	),
 												  "getCallback" : ``(get_adv_ldap_service_password_file()),
@@ -971,7 +994,9 @@ define map itemMap = $[
 																								  (KerberosServer::getKdbvalue("kdb_sscope") == "sub")?true:false)),
 																			   `Left(`RadioButton(`id(`one), _("one level"),
 																								  (KerberosServer::getKdbvalue("kdb_sscope") == "sub")?false:true))
-																			  ))))
+																			  )))),
+																  `VSpacing(1.5),
+																  `RichText( HELPS["adv_kdb_subtrees"]:"")
 																 )
 														   ),
 										 "getCallback" : ``(get_adv_kdb_subtrees()),
@@ -981,7 +1006,8 @@ define map itemMap = $[
 											 "widget" : `Frame ("",
 																`VBox(`TextEntry(`id(`id_kdb_containerref), "",
 																				 KerberosServer::getKdbvalue("kdb_containerref")),
-																	  `VSpacing(1.5)
+																	  `VSpacing(1.5),
+																	  `RichText( HELPS["adv_kdb_containerref"]:"")
 																	 )
 															   ),
 											 "getCallback" : ``(get_adv_kdb_containerref()),
@@ -997,7 +1023,9 @@ define map itemMap = $[
 																					0, 365, 0),
 																		  `Time(`id(`id_kdb_maxtktlife_time),
 																				_("Time"))
-																		 )
+																		 ),
+																	`VSpacing(1.5),
+																	`RichText( HELPS["adv_kdb_maxtktlife"]:"")
 																   )
 															 ),
 										   "default"     : ``(get_adv_kdb_maxtktlife()),
@@ -1014,7 +1042,9 @@ define map itemMap = $[
 																					  0, 365, 0),
 																			`Time(`id(`id_kdb_maxrenewlife_time),
 																				  _("Time"))
-																		   )
+																		   ),
+																	  `VSpacing(1.5),
+																	  `RichText( HELPS["adv_kdb_maxrenewlife"]:"")
 																	 )
 															   ),
 											 "default"     : ``(get_adv_kdb_maxrenewlife()),
@@ -1045,19 +1075,22 @@ define map itemMap = $[
 																			   // checkbox text in MultiSelectionBox
 																			   _("Requires hwauth"), false)),
 															   // checkbox text in MultiSelectionBox
-															   `Left(`CheckBox(`id (`kdb_flags_allow_svr), _("Allow svr"), false)),
+															   `Left(`CheckBox(`id (`kdb_flags_allow_svr),
+																			   _("Allow service"), false)),
 															   `Left(`CheckBox(`id (`kdb_flags_allow_tgs_req),
 																			   // checkbox text in MultiSelectionBox
 																			   _("Allow tgs request"), false)),
 															   // checkbox text in MultiSelectionBox
-															   `Left(`CheckBox(`id (`kdb_flags_allow_tix), _("Allow tix"), false)),
+															   `Left(`CheckBox(`id (`kdb_flags_allow_tix),
+																			   _("Allow tickets"), false)),
 															   `Left(`CheckBox(`id (`kdb_flags_needchange),
 																			   // checkbox text in MultiSelectionBox
 																			   _("Needchange"), false)),
 															   `Left(`CheckBox(`id (`kdb_flags_password_changing_service),
 																			   // checkbox text in MultiSelectionBox
 																			   _("Password changing service"), false)),
-															   `VSpacing(1.5)
+															   `VSpacing(1.5),
+															   `RichText( HELPS["adv_default_principal_flags"]:"")
 															  )
 														),
 									  "default"     : ``(get_adv_kdb_flags()),
