@@ -2381,6 +2381,59 @@ sub decodeTime
     return $out;
 }
 
+BEGIN { $TYPEINFO{decodeDateTime} = ["function", ["list", "string"], "string"]; }
+sub decodeDateTime
+{
+    my $class = shift;
+    my $datetime = shift;
+
+    my $date = "";
+    my $time = "";
+    # convert the datetime format   "yyyymmddhhmmss" => "yyy-mm-dd", "hh:mm:ss"
+    if($datetime =~ /^\s*(\d\d\d\d)\.?(\d\d)\.?(\d\d)\.?(\d\d)\.?(\d\d)\.?(\d\d)\s*/)
+    {
+        $date = sprintf("%04d-%02d-%02d",$1, $2, $3);
+        $time = sprintf("%02d:%02d:%02d",$4, $5, $6);
+    }
+    return ["$date","$time"];
+}
+
+BEGIN { $TYPEINFO{encodeDateTime} = ["function", "string", "string", "string"]; }
+sub encodeDateTime
+{
+    my $class = shift;
+    my $date  = shift || undef;
+    my $time  = shift || undef;
+    
+    my $datetime = "";
+    
+    if(!defined $date || !defined $time)
+    {
+        return "20070101000000";
+    }
+        
+    if($date =~ /^\s*(\d\d\d\d)-(\d\d)-(\d\d)\s*$/)
+    {
+        $datetime .= sprintf("%04d%02d%02d",$1, $2, $3);
+    }
+    else
+    {
+        $datetime = "20070101000000";
+    }
+    
+    if($time =~ /^\s*(\d\d):(\d\d):(\d\d)\s*$/)
+    {
+        $datetime .= sprintf("%02d%02d%02d",$1, $2, $3);
+    }
+    else
+    {
+        $datetime = "20070101000000";
+    }
+    return $datetime;
+}
+
+
+
 sub encodeTime
 {
     my $class = shift;
@@ -2425,6 +2478,8 @@ sub encodeTime
     }
     return $time;   
 }
+
+
 
 sub toKdb5UtilTime
 {
