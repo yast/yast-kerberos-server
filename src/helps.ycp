@@ -58,7 +58,7 @@ An additional dialog informs whether it is safe to do so.
 </p>
 "),
 	/* Help text: ask for database backend 1/4 */
-	"AskDBtype" : _("<p>Here you specify where the kerberos server sould store the data.</p>") +
+	"AskDBtype" : _("<p>Here you specify where the kerberos server should store the data.</p>") +
 
 	/* Help text: ask for database backend 2/4 */
 	_("<p><big>Local Database</big> will create a local database for storing the credentials.</p>") + 
@@ -81,16 +81,16 @@ it the same as your domain name, in upper-case letters.</p>"),
 
 
 	/* Help text: Use existing LDAP server 1/6 */
-	"useldap" : _("<p>In this dialog, edit some parameters for the LDAP sever.<p>") +
+	"useldap" : _("<p>In this dialog, edit some parameters for the LDAP server.<p>") +
 
 	/* Help text: Use existing LDAP server 2/6 */
-	_("<p><big>LDAP Server URI</big> secifiy the location of the LDAP server. E.g. ldaps://host.domain.com .</p>") +
+	_("<p><big>LDAP Server URI</big> specify the location of the LDAP server. E.g. ldaps://host.domain.com .</p>") +
 	
 	/* Help text: Use existing LDAP server 3/6 */
 	_("<p>With <big>LDAP base DN</big> you can change the base DN of the LDAP server.</p>") +
 
 	/* Help text: Use existing LDAP server 4/6 */
-	_("<p>The <big>Kerberos Container DN</big> specify the container where the Kerberos server should create the
+	_("<p>The <big>Kerberos Container DN</big> specifies the container where the Kerberos server should create the
 the principals and other informational data by default.</p>") +
 
 	/* Help text: Use existing LDAP server 5/6 */
@@ -103,7 +103,7 @@ This account needs also write access.</p>"),
 
 	
 	/* Help text: New LDAP server 1/6 */
-	"newldap" : _("<p>In this dialog, edit some parameters to setup an LDAP sever.<p>") +
+	"newldap" : _("<p>In this dialog, edit some parameters to setup an LDAP server.<p>") +
 
 	/* Help text: New LDAP server 2/6 */
 	_("<p>With <big>LDAP base DN</big> you can change the base DN of the LDAP server.</p>") +

@@ -176,7 +176,7 @@ any KerberosServerSequence()
 any KerberosServerAutoSequence() {
 	
     /* Initialization dialog caption */
-    string caption = _("KerberosServer Configuration");
+    string caption = _("Kerberos Server Configuration");
     /* Initialization dialog contents */
     term contents = `Label(_("Initializing..."));
 	

@@ -2292,7 +2292,7 @@ sub Summary {
         $sum .= "<tr><td>".__("LDAP Server URI:")."</td><td>".$ldapdb->{ldap_server}."</td></tr>";
 
         # summary text 
-        $sum .= "<tr><td>".__("Kerbeors Container DN:")."</td><td>".$ldapdb->{ldap_kerberos_container_dn}."</td></tr>";
+        $sum .= "<tr><td>".__("Kerberos Container DN:")."</td><td>".$ldapdb->{ldap_kerberos_container_dn}."</td></tr>";
 
         # summary text 
         $sum .= "<tr><td>".__("KDC bind DN:")."</td><td>".$ldapdb->{ldap_kdc_dn}."</td></tr>";
