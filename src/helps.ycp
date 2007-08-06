@@ -90,7 +90,7 @@ it the same as your domain name, in upper-case letters.</p>"),
 	_("<p>With <big>LDAP base DN</big> you can change the base DN of the LDAP server.</p>") +
 
 	/* Help text: Use existing LDAP server 4/6 */
-	_("<p>The <big>Kerberos Container DN</big> specifies the container where the Kerberos server should create the
+	_("<p>The <big>Kerberos Container DN</big> specifies the container where the Kerberos server should create 
 the principals and other informational data by default.</p>") +
 
 	/* Help text: Use existing LDAP server 5/6 */
@@ -109,7 +109,7 @@ This account needs also write access.</p>"),
 	_("<p>With <big>LDAP base DN</big> you can change the base DN of the LDAP server.</p>") +
 
 	/* Help text: New LDAP server 3/6 */
-	_("<p>The <big>Kerberos Container DN</big> specify the container where the Kerberos server should create the
+	_("<p>The <big>Kerberos Container DN</big> specify the container where the Kerberos server should create 
 the principals and other informational data by default.</p>") +
 
 	/* Help text: New LDAP server 4/6 */
