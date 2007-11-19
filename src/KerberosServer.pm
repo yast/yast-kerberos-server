@@ -100,6 +100,20 @@ my $domain = undef;
 
 ################################################################
 
+my $requiredObjectClasses = {
+                             krbContainer => "2.16.840.1.113719.1.301.6.1.1",
+                             krbRealmContainer => "2.16.840.1.113719.1.301.6.2.1",
+                             krbPrincipalAux => "2.16.840.1.113719.1.301.6.8.1",
+                             krbPrincipal => "2.16.840.1.113719.1.301.6.9.1",
+                             krbPrincRefAux => "2.16.840.1.113719.1.301.6.11.1",
+                             krbPwdPolicy => "2.16.840.1.113719.1.301.6.14.1",
+                             krbTicketPolicyAux => "2.16.840.1.113719.1.301.6.16.1",
+                             krbTicketPolicy => "2.16.840.1.113719.1.301.6.17.1"
+                            };
+
+
+################################################################
+
 my $foundDB = 0;
 
 # Was a database found during Read() ?
@@ -544,6 +558,47 @@ without installing the required packages."));
 }
 
 
+BEGIN { $TYPEINFO{CheckSchema} = ["function", "boolean", "void"]; }
+sub CheckSchema
+{
+    my $class = shift;
+
+    my $ret = $class->initLDAP();
+    if(not $ret)
+    {
+        return $ret;
+    }
+    
+    if(! SCR->Execute(".ldap.schema", {"schema_dn" => "cn=Subschema"}))
+    {
+        my $ldapERR = SCR->Read(".ldap.error");
+        y2error("LDAP schema init failed:".$ldapERR->{'code'}." : ".$ldapERR->{'msg'});
+        return 0;
+    }
+
+    foreach my $key (keys %{$requiredObjectClasses})
+    {
+        my $schemaMap = SCR->Read(".ldap.schema.object_class", { "name" => $key });
+        if(!defined $schemaMap)
+        {
+            my $ldapERR = SCR->Read(".ldap.error");
+            y2error("LDAP readingschema failed:".$ldapERR->{'code'}." : ".$ldapERR->{'msg'});
+            return 0;
+        }
+        
+        y2milestone("SCHEMA MAP:".Data::Dumper->Dump([$schemaMap]));
+        
+        if(!exists $schemaMap->{oid} || !defined $schemaMap->{oid} || 
+           $schemaMap->{oid} ne $requiredObjectClasses->{$key})
+        {
+            y2error("Kerberos Schema not known to the LDAP server.");
+            return 0;
+        }
+    }    
+    
+    return 1;
+}
+
 
 BEGIN { $TYPEINFO{CreateDefaultCerts} = ["function", "boolean", "string"]; }
 sub CreateDefaultCerts
@@ -837,12 +892,11 @@ sub SetupLdapClient
             # local ldap server; use hostname and domain 
             $data->{ldap_server} = "$hostname.$domain"; # == ldap server IP address or name
         }
-        elsif($uriParts->{scheme} eq "ldaps" && $uriParts->{host} ne "")
+        elsif(($uriParts->{scheme} eq "ldaps" || $uriParts->{scheme} eq "ldap") && $uriParts->{host} ne "")
         {
             # local ldap server; use hostname and domain 
             $data->{ldap_server} = $uriParts->{host}; # == ldap server IP address or name
         }
-        # FIXME: support scheme ldap ? 
         else
         {
             y2error("Wrong LDAP URI: scheme ".$uriParts->{scheme}." not allowed");
@@ -864,7 +918,7 @@ sub SetupLdapClient
     
     $data->{ldap_domain}   = "$ldapbasedn"; # == basedn
     $data->{start_ldap}    = Boolean(1);
-    $data->{ldap_tls}      = Boolean(1);
+    #$data->{ldap_tls}      = Boolean(1);
     $data->{login_enabled} = Boolean(0);
     $data->{bind_dn}       = $ldapdb->{ldap_kadmind_dn}; # we use kadmin dn, because it needs write access
     $data->{create_ldap}   = Boolean(1);
@@ -1154,19 +1208,57 @@ sub ReadDefaultLdapValues
     if(Ldap->Read()) 
     {
         my $ldapMap = Ldap->Export();
-        
-        if(defined $ldapMap->{'ldap_server'} && $ldapMap->{'ldap_server'} ne "") 
-        {
-            my $dummy = $ldapMap->{'ldap_server'};
             
-            $ldapdb->{ldap_server} = "https://".Ldap->GetFirstServer("$dummy");
-        } 
-    
-        $ldapbasedn = $ldapMap->{'ldap_domain'};
+        if(!exists $ldapdb->{ldap_server} || !defined $ldapdb->{ldap_server} || $ldapdb->{ldap_server} eq "")
+        {
+            if(defined $ldapMap->{'ldap_server'} && $ldapMap->{'ldap_server'} ne "") 
+            {
+                my $dummy = $ldapMap->{'ldap_server'};
+                
+                $ldapdb->{ldap_server} = "ldaps://".Ldap->GetFirstServer("$dummy");
+            }
+        }            
         
-        $ldapdb->{ldap_kerberos_container_dn} = "cn=krbcontainer,".$ldapbasedn;
-        $ldapdb->{ldap_kdc_dn} = $ldapMap->{'bind_dn'};
-        $ldapdb->{ldap_kadmind_dn} = $ldapMap->{'bind_dn'};
+        if($ldapbasedn eq "")
+        {
+            if($ldapMap->{'ldap_domain'} ne "")
+            {
+                $ldapbasedn = $ldapMap->{'ldap_domain'};
+            }
+            else
+            {
+                $ldapbasedn = "dc=".join(",dc=", split(/\./, $domain));
+            }
+        }
+        
+        if(!exists $ldapdb->{ldap_kerberos_container_dn})
+        {
+            $ldapdb->{ldap_kerberos_container_dn} = "cn=krbcontainer,".$ldapbasedn;
+        }
+        
+        if(!exists $ldapdb->{ldap_kdc_dn})
+        {
+            if($ldapMap->{'bind_dn'} ne "")
+            {
+                $ldapdb->{ldap_kdc_dn} = $ldapMap->{'bind_dn'};
+            }
+            else
+            {
+                $ldapdb->{ldap_kdc_dn} = "cn=Administrator,".$ldapbasedn;
+            }
+        }
+        
+        if(!exists $ldapdb->{ldap_kadmind_dn})
+        {
+            if($ldapMap->{'bind_dn'} ne "")
+            {
+                $ldapdb->{ldap_kadmind_dn} = $ldapMap->{'bind_dn'};
+            }
+            else
+            {
+                $ldapdb->{ldap_kadmind_dn} = "cn=Administrator,".$ldapbasedn;
+            }
+        }
     }
 }
 
@@ -1185,41 +1277,39 @@ sub initLDAP
     
     my $use_tls = "try";
     my $ldapMap = {};
-    
-    if(Ldap->Read()) 
+
+    Ldap->Read(); 
+
+    if(exists $ldapdb->{ldap_server} && defined $ldapdb->{ldap_server} && $ldapdb->{ldap_server} ne "")
     {
-        $ldapMap = Ldap->Export();
+        y2milestone("initLDAP: found ldap_server $ldapdb->{ldap_server}");
+        
+        my $uriParts = URL->Parse($ldapdb->{ldap_server});
 
-        foreach (keys %{$ldapMap})
+        if($uriParts->{scheme} eq "ldapi")
         {
-            $ldapMap->{$_} = Boolean(1) if("$ldapMap->{$_}" eq "1");
-            $ldapMap->{$_} = Boolean(0) if("$ldapMap->{$_}" eq "0");
+            # local ldap server; use hostname and domain
+            $ldapMap->{ldap_server} = "$hostname.$domain"; # == ldap server IP address or name
         }
+         elsif(($uriParts->{scheme} eq "ldaps" || $uriParts->{scheme} eq "ldap") && $uriParts->{host} ne "")
+         {
+             # local ldap server; use hostname and domain
+             $ldapMap->{ldap_server} = $uriParts->{host}; # == ldap server IP address or name
+             $ldapMap->{ldap_port} = $uriParts->{port};
+         }
+         else
+         {
+             y2error("Wrong LDAP URI: scheme ".$uriParts->{scheme}." not allowed");
+             return 0;
+         }
 
-        if(defined $ldapMap->{'ldap_server'} && $ldapMap->{'ldap_server'} ne "") 
-        {
-            my $dummy = $ldapMap->{'ldap_server'};
-            $ldapMap->{'ldap_server'} = Ldap->GetFirstServer("$dummy");
-            $ldapMap->{'ldap_port'} = Ldap->GetFirstPort("$dummy");
-        } 
-        else 
-        {
-            y2error("No LDAP server configured.");
-            return 0;
-        }
-        if(defined $ldapMap->{ldap_tls} ) 
-        {
-            if($ldapMap->{ldap_tls} == 1) 
-            {
-                $use_tls = "yes"
-            }
-            else 
-            {
-                $use_tls = "no";
-            }
-        }
-    }
-
+         if(!exists $ldapMap->{ldap_port} || !defined $ldapMap->{ldap_port} || $ldapMap->{ldap_port} eq "")
+         {
+             # ldaps on 636 is not supported by the ldap agent
+             $ldapMap->{ldap_port} = 389;
+         }
+    }     
+   
     if (! SCR->Execute(".ldap", {"hostname" => $ldapMap->{'ldap_server'},
                                  "port"     => $ldapMap->{'ldap_port'},
                                  "use_tls"  => $use_tls })) 
@@ -1238,7 +1328,7 @@ sub initLDAP
         
         $ldapkadmpw = Ldap->LDAPAskAndBind(Boolean(0));
 
-        $ldapMap->{bind_dn} = $old_bind_dn;        
+        $ldapMap->{bind_dn} = $old_bind_dn;
         Ldap->Set($ldapMap);
     }
     else
@@ -1493,6 +1583,7 @@ sub ReadDatabase
                             }
                         }
                         $class->ReadAttributesFromLDAP();
+
                         last;
                     }
                 }
@@ -1967,6 +2058,13 @@ sub WriteDatabase
                 {
                     return $ret;
                 }
+
+                y2milestone("Call SetupLdapClient");
+                $ret = $class->SetupLdapClient();
+                if(!$ret)
+                {
+                    return $ret;
+                }
             }
             else
             {
@@ -1975,14 +2073,15 @@ sub WriteDatabase
                 {
                     return $ret;
                 }
+
+                y2milestone("Call CheckSchema");
+                $ret = $class->CheckSchema();
+                if(!$ret)
+                {
+                    return $ret;
+                }
             }
-                        
-            y2milestone("Call SetupLdapClient");
-            $ret = $class->SetupLdapClient();
-            if(!$ret)
-            {
-                return $ret;
-            }
+
             y2milestone("Call SetupLdapBackend");
             $ret = $class->SetupLdapBackend();
             if(!$ret)
