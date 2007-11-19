@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Mon Nov 19 17:30:57 CET 2007 - mc@suse.de
+
+- fixing wrong default URL [#340912]
+- do not lose values if going to advanced settings and back.
+  [#340912]
+- check if the kerberos schema is known to the ldapsever
+  if using external ldap server. [#340912]
+
+-------------------------------------------------------------------
 Mon Aug 27 14:46:59 CEST 2007 - mc@suse.de
 
 - version 2.15.4
