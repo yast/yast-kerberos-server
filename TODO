@@ -1,3 +1,5 @@
 - add tkt policy support
 - read default user container from ldap-client and add this to subtrees
   (you can only create principals at places where you also search for it)
+- Add Error Popups - let the user know whats going wrong.
+
