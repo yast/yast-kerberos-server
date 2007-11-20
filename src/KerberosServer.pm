@@ -55,6 +55,7 @@ YaST::YCP::Import ("Kerberos");
 YaST::YCP::Import ("Service");
 YaST::YCP::Import ("Package");
 YaST::YCP::Import ("Progress");
+YaST::YCP::Import ("Popup");
 YaST::YCP::Import ("Report");
 YaST::YCP::Import ("Summary");
 YaST::YCP::Import ("Message");
@@ -111,6 +112,11 @@ my $requiredObjectClasses = {
                              krbTicketPolicy => "2.16.840.1.113719.1.301.6.17.1"
                             };
 
+################################################################
+
+my $errorMsg = undef;
+
+my $errorDetails = "";
 
 ################################################################
 
@@ -509,6 +515,22 @@ sub getKdbAttr
 
 #################################################################
 
+sub showError
+{
+    my $class = shift;
+
+    if(defined $errorMsg && $errorMsg ne "" && $errorDetails ne "")
+    {
+        Popup->ErrorDetails($errorMsg, $errorDetails);
+    }
+    elsif(defined $errorMsg && $errorMsg ne "")
+    {
+        Popup->Error($errorMsg);
+    }
+    return 1;
+}
+
+
 
 BEGIN { $TYPEINFO{splitTime} = ["function", ["list", "any"], "string"]; }
 sub splitTime
@@ -573,6 +595,8 @@ sub CheckSchema
     {
         my $ldapERR = SCR->Read(".ldap.error");
         y2error("LDAP schema init failed:".$ldapERR->{'code'}." : ".$ldapERR->{'msg'});
+        $errorMsg = _("Initialize LDAP schema failed.");
+        $errorDetails = "LDAP message:".$ldapERR->{'code'}." : ".$ldapERR->{'msg'};
         return 0;
     }
 
@@ -582,19 +606,22 @@ sub CheckSchema
         if(!defined $schemaMap)
         {
             my $ldapERR = SCR->Read(".ldap.error");
-            y2error("LDAP readingschema failed:".$ldapERR->{'code'}." : ".$ldapERR->{'msg'});
+            y2error("LDAP reading schema failed:".$ldapERR->{'code'}." : ".$ldapERR->{'msg'});
+            $errorMsg = _("Reading LDAP schema failed.");
+            $errorDetails = "LDAP message:".$ldapERR->{'code'}." : ".$ldapERR->{'msg'};
             return 0;
         }
         
-        y2milestone("SCHEMA MAP:".Data::Dumper->Dump([$schemaMap]));
+        #y2milestone("SCHEMA MAP:".Data::Dumper->Dump([$schemaMap]));
         
         if(!exists $schemaMap->{oid} || !defined $schemaMap->{oid} || 
            $schemaMap->{oid} ne $requiredObjectClasses->{$key})
         {
             y2error("Kerberos Schema not known to the LDAP server.");
+            $errorMsg = _("Kerberos Schema not known to the LDAP server.");
             return 0;
         }
-    }    
+    }
     
     return 1;
 }
@@ -616,6 +643,7 @@ sub CreateDefaultCerts
     if(! defined $passwd || $passwd eq "")
     {
         y2error("No password set");
+        $errorMsg = _("No password available to create the default certificate.");
         return 0;
     }
     
@@ -632,6 +660,8 @@ sub CreateDefaultCerts
         # error
         my $Yerr = YaPI::CaManagement->Error();
         y2error("Read Certificate Defaults failed: ".Data::Dumper->Dump([$Yerr]));
+        $errorMsg = $Yerr->{summary};
+        $errorDetails = $Yerr->{description};
         return 0;
     }
     
@@ -661,6 +691,8 @@ sub CreateDefaultCerts
         # error
         my $Yerr = YaPI::CaManagement->Error();
         y2error("Add Root CA failed: ".Data::Dumper->Dump([$Yerr]));
+        $errorMsg = $Yerr->{summary};
+        $errorDetails = $Yerr->{description};
         return 0;
     }
     
@@ -676,6 +708,8 @@ sub CreateDefaultCerts
         # error
         my $Yerr = YaPI::CaManagement->Error();
         y2error("Read Certificate Defaults failed: ".Data::Dumper->Dump([$Yerr]));
+        $errorMsg = $Yerr->{summary};
+        $errorDetails = $Yerr->{description};
         return 0;
     }
     if(exists $certValueMap->{DN})
@@ -706,6 +740,8 @@ sub CreateDefaultCerts
         # error
         my $Yerr = YaPI::CaManagement->Error();
         y2error("Add Certificate failed: ".Data::Dumper->Dump([$Yerr]));
+        $errorMsg = $Yerr->{summary};
+        $errorDetails = $Yerr->{description};
         return 0;
     }
     
@@ -725,6 +761,8 @@ sub CreateDefaultCerts
         # error
         my $Yerr = YaPI::CaManagement->Error();
         y2error("Export Certificate failed: ".Data::Dumper->Dump([$Yerr]));
+        $errorMsg = $Yerr->{summary};
+        $errorDetails = $Yerr->{description};
         return 0;
     }
     
@@ -739,6 +777,8 @@ sub CreateDefaultCerts
         # error
         my $Yerr = YaPI::CaManagement->Error();
         y2error("Import Common Server Certificate failed: ".Data::Dumper->Dump([$Yerr]));
+        $errorMsg = $Yerr->{summary};
+        $errorDetails = $Yerr->{description};
         unlink("/tmp/YaST-Servercert.p12");
         return 0;
     }
@@ -761,6 +801,7 @@ sub SetupLdapServer
     if(-e "/var/lib/ldap/__db.001")
     {
         y2error("Database exists. Cannot create a new one.");
+        $errorMsg = _("LDAP database exists. Cannot create a new one.");
         return 0;
     }
     my $directory = "/var/lib/ldap";
@@ -772,6 +813,7 @@ sub SetupLdapServer
     if (!SCR->Write (".sysconfig.openldap", undef))
     {
         y2error ("error writing /etc/sysconfig/openldap");
+        $errorMsg = _("Cannot write /etc/sysconfig/openldap .");
         return 0;
     }    
 
@@ -792,6 +834,8 @@ sub SetupLdapServer
     if(! -e "/usr/share/doc/packages/krb5/kerberos.schema")
     {
         y2error("Kerberos schema file not found");
+        $errorMsg = _("Kerberos schema file not found");
+        $errorDetails = "/usr/share/doc/packages/krb5/kerberos.schema not found.";
         return 0;
     }
 
@@ -850,7 +894,7 @@ sub SetupLdapServer
 
     if (!SCR->Write (".ldapserver.krb5ACLHack", "" ))
     {
-        return undef;
+        return 0;
     }
     YaPI::LdapServer->SwitchService(1);
 
@@ -906,6 +950,7 @@ sub SetupLdapClient
     else
     {
         y2error("No LDAP server URI specified");
+        $errorMsg = _("No LDAP server URI specified.");
         return 0;
     }
     
@@ -954,6 +999,8 @@ sub SetupLdapBackend
         #    next;
         #}
         y2error("Error on writing to krb5.conf:".Data::Dumper->Dump([$err]));
+        $errorMsg = _("Cannot write krb5.conf.");
+        $errorDetails = $err->{summary};
         return 0;
     }
 
@@ -966,6 +1013,8 @@ sub SetupLdapBackend
         #    next;
         #}
         y2error("Error on writing to krb5.conf:".Data::Dumper->Dump([$err]));
+        $errorMsg = _("Cannot write krb5.conf.");
+        $errorDetails = $err->{summary};
         return 0;
     }
 
@@ -978,6 +1027,8 @@ sub SetupLdapBackend
         #    next;
         #}
         y2error("Error on writing to krb5.conf:".Data::Dumper->Dump([$err]));
+        $errorMsg = _("Cannot write krb5.conf.");
+        $errorDetails = $err->{summary};
         return 0;
     }
 
@@ -990,6 +1041,8 @@ sub SetupLdapBackend
         #    next;
         #}
         y2error("Error on writing to krb5.conf:".Data::Dumper->Dump([$err]));
+        $errorMsg = _("Cannot write krb5.conf.");
+        $errorDetails = $err->{summary};
         return 0;
     }
     
@@ -1003,6 +1056,8 @@ sub SetupLdapBackend
         #    next;
         #}
         y2error("Error on writing to krb5.conf:".Data::Dumper->Dump([$err]));
+        $errorMsg = _("Cannot write krb5.conf.");
+        $errorDetails = $err->{summary};
         return 0;
     }
     
@@ -1057,6 +1112,8 @@ sub SetupLdapBackend
     my $pid = open3(\*IN, \*OUT, \*ERR, "/usr/lib/mit/sbin/kdb5_ldap_util", @cmdArgs)
     or do {
         y2error("Can not execute kdb5_ldap_util: $!");
+        $errorMsg = _("Cannot execute kdb5_ldap_util .");
+        $errorDetails = "$!";
         return 0;
     };
     
@@ -1087,6 +1144,8 @@ sub SetupLdapBackend
     my $code = ($?>>8);
     if($code != 0)
     {
+        $errorMsg = _("Creating kerberos database failed.");
+        $errorDetails = "$err";
         return 0;
     }
     
@@ -1101,6 +1160,8 @@ sub SetupLdapBackend
     $pid = open3(\*IN, \*OUT, \*ERR, "/usr/lib/mit/sbin/kdb5_ldap_util", @cmdArgs)
     or do {
         y2error("Can not execute kdb5_ldap_util: $!");
+        $errorMsg = _("Cannot execute kdb5_ldap_util .");
+        $errorDetails = "$!";
         return 0;
     };
     
@@ -1132,6 +1193,8 @@ sub SetupLdapBackend
     $code = ($?>>8);
     if($code != 0)
     {
+        $errorMsg = _("Writing to password file failed.");
+        $errorDetails = "$err";
         return 0;
     }
     
@@ -1146,6 +1209,8 @@ sub SetupLdapBackend
         $pid = open3(\*IN, \*OUT, \*ERR, "/usr/lib/mit/sbin/kdb5_ldap_util", @cmdArgs)
         or do {
             y2error("Can not execute kdb5_ldap_util: $!");
+            $errorMsg = _("Cannot execute kdb5_ldap_util .");
+            $errorDetails = "$!";
             return 0;
         };
                 
@@ -1176,6 +1241,8 @@ sub SetupLdapBackend
         $code = ($?>>8);
         if($code != 0)
         {
+            $errorMsg = _("Writing to password file failed.");
+            $errorDetails = "$err";
             return 0;
         }
     }
@@ -1272,6 +1339,7 @@ sub initLDAP
        $ldapdb->{ldap_kadmind_dn} eq "")
     {
         y2error("No bind DN available");
+        $errorMsg = _("No bind DN availbale.");
         return 0;
     }
     
@@ -1300,6 +1368,8 @@ sub initLDAP
          else
          {
              y2error("Wrong LDAP URI: scheme ".$uriParts->{scheme}." not allowed");
+             $errorMsg = _("Invalid LDAP URI scheme.");
+             $errorDetails = $uriParts->{scheme}." is not allowed.";
              return 0;
          }
 
@@ -1315,6 +1385,7 @@ sub initLDAP
                                  "use_tls"  => $use_tls })) 
     {
         y2error("LDAP initialization failed.");
+        $errorMsg = _("LDAP initialization failed.");
         return 0;
     }
     
@@ -1339,6 +1410,8 @@ sub initLDAP
         {
             my $ldapERR = SCR->Read(".ldap.error");
             y2error("LDAP bind failed.(".$ldapERR->{'code'}.") : ".$ldapERR->{'msg'});
+            $errorMsg = _("LDAP bind failed.");
+            $errorDetails = $ldapERR->{'code'}.": ".$ldapERR->{'msg'};
             return 0;
         }
     }
@@ -1375,6 +1448,8 @@ sub ReadAttributesFromLDAP
     {
         my $ldapERR = SCR->Read(".ldap.error");
         y2error("Error while searching in LDAP.(".$ldapERR->{'code'}." : ".$ldapERR->{'msg'});
+        $errorMsg = _("LDAP search failed.");
+        $errorDetails = $ldapERR->{'code'}.": ".$ldapERR->{'msg'};
         return 0;
     }
 
@@ -1602,25 +1677,25 @@ sub ReadDatabase
             if(not $ret)
             {
                 my $err = SCR->Error(".kdc_conf");
-                y2error("Error on writing to kdc.conf:".Data::Dumper->Dump([$err]));
+                y2milestone("Writing to kdc.conf failed:".Data::Dumper->Dump([$err]));
             }
             $ret = SCR->Write(".kdc_conf", undef);
             if(not $ret)
             {
                 my $err = SCR->Error(".kdc_conf");
-                y2error("Error on writing to kdc.conf:".Data::Dumper->Dump([$err]));
+                y2milestone("Writing to kdc.conf failed:".Data::Dumper->Dump([$err]));
             }
             $ret = SCR->Write(".krb5_conf.realms.\"$dbrealm\"", undef);
             if(not $ret)
             {
                 my $err = SCR->Error(".krb5_conf");
-                y2error("Error on writing to krb5.conf:".Data::Dumper->Dump([$err]));
+                y2milestone("Writing to krb5.conf failed:".Data::Dumper->Dump([$err]));
             }
             $ret = SCR->Write(".krb5_conf", undef);
             if(not $ret)
             {
                 my $err = SCR->Error(".krb5_conf");
-                y2error("Error on writing to krb5.conf:".Data::Dumper->Dump([$err]));
+                y2milestone("Writing to krb5.conf failed:".Data::Dumper->Dump([$err]));
             }
         }
         # check for if some defaults are available. If not, set them
@@ -1712,6 +1787,8 @@ sub WriteKrb5Conf
             #    next;
             #}
             y2error("Error on writing to krb5.conf:".Data::Dumper->Dump([$err]));
+            $errorMsg = _("Writing to krb5.conf failed.");
+            $errorDetails = $err->{summary};
             return 0;
         }
     }
@@ -1719,7 +1796,10 @@ sub WriteKrb5Conf
     $ret = SCR->Write(".krb5_conf", undef);
     if(not $ret)
     {
-        y2error("Error on writing to krb5.conf:".Data::Dumper->Dump([SCR->Error(".krb5_conf")]));
+        my $err = SCR->Error(".krb5_conf");
+        y2error("Error on writing to krb5.conf:".Data::Dumper->Dump([$err]));
+        $errorMsg = _("Writing to krb5.conf failed.");
+        $errorDetails = $err->{summary};
         return 0;
     }
     return $ret;
@@ -1760,13 +1840,18 @@ sub WriteKdcConf
                 next;
             }
             y2error("Error on writing to kdc.conf:".Data::Dumper->Dump([$err]));
+            $errorMsg = _("Writing to kdc.conf failed.");
+            $errorDetails = $err->{summary};
             return 0;
         }
     }
     $ret = SCR->Write(".kdc_conf", undef);
     if(not $ret)
     {
-        y2error("Error on writing to kdc.conf:".Data::Dumper->Dump([SCR->Error(".kdc_conf")]));
+        my $err = SCR->Error(".kdc_conf");
+        y2error("Error on writing to kdc.conf:".Data::Dumper->Dump([$err]));
+        $errorMsg = _("Writing to kdc.conf failed.");
+        $errorDetails = $err->{summary};
         return 0;
     }
     return $ret;
@@ -1789,6 +1874,7 @@ sub ModifyLdapEntries
        $ldapdb->{ldap_kadmind_dn} eq "")
     {
         y2error("No bind DN available");
+        $errorMsg = _("No bind DN availbale.");
         return 0;
     }
 
@@ -1847,7 +1933,9 @@ sub ModifyLdapEntries
     
     my $pid = open3(\*IN, \*OUT, \*ERR, "/usr/lib/mit/sbin/kdb5_ldap_util", @cmdArgs)
     or do {
-        y2error("Can not execute kdb5_ldap_util: $!");
+        y2error("Cannot execute kdb5_ldap_util: $!");
+        $errorMsg = _("Cannot execute kdb5_ldap_util .");
+        $errorDetails = "$!";
         return 0;
     };
 
@@ -1877,6 +1965,8 @@ sub ModifyLdapEntries
     my $code = ($?>>8);
     if($code != 0)
     {
+        $errorMsg = _("Modifing the kerberos database failed.");
+        $errorDetails = "$err";
         return 0;
     }
     
@@ -1904,6 +1994,8 @@ sub ModifyLdapEntries
             {
                 my $ldapERR = SCR->Read(".ldap.error");
                 y2error("Error while searching in LDAP.(".$ldapERR->{'code'}.") : ".$ldapERR->{'msg'});
+                $errorMsg = _("LDAP search failed.");
+                $errorDetails = $ldapERR->{'code'}.": ".$ldapERR->{'msg'};
                 return 0;
             }
             if(@$DNs == 1)
@@ -1916,8 +2008,14 @@ sub ModifyLdapEntries
                 {
                     my $ldapERR = SCR->Read(".ldap.error");
                     y2error("Error while deleting attribute ($attribute) in LDAP.(".$ldapERR->{'code'}.") : ".$ldapERR->{'msg'});
+                    $errorMsg = _("LDAP modify failed.");
+                    $errorDetails = $ldapERR->{'code'}.": ".$ldapERR->{'msg'};
                 }
-            }        
+            }
+        }
+        if(defined $errorMsg && $errorMsg ne "")
+        {
+            return 0;
         }
     }
     
@@ -1941,6 +2039,8 @@ sub WriteDatabase
        ! defined $dbtype  || $dbtype  eq "")
     {
         y2error("No realm or dbtype set");
+        $errorMsg = _("Incomplete data.");
+        $errorDetails = "realm or dbtype not set.";
         return 0;
     }
     
@@ -1954,13 +2054,17 @@ sub WriteDatabase
                $db->{database_name} eq "")
             {
                 y2error("no database name set");
+                $errorMsg = _("No database name set.");
                 return 0;
             }
             
             $ret = SCR->Write(".kdc_conf.realms.\"$dbrealm\".database_name", [$db->{database_name}]);
             if(not $ret)
             {
-                y2error("Error on writing to kdc.conf:".Data::Dumper->Dump([SCR->Error(".kdc_conf")]));
+                my $err = SCR->Error(".kdc_conf");
+                y2error("Error on writing to kdc.conf:".Data::Dumper->Dump([$err]));
+                $errorMsg = _("Cannot write kdc.conf.");
+                $errorDetails = $err->{summary};
                 return 0;
             }
             
@@ -1974,13 +2078,19 @@ sub WriteDatabase
             $ret = SCR->Write(".krb5_conf.libdefaults.default_realm", [$dbrealm]);
             if(not $ret)
             {
-                y2error("Error on writing to krb5.conf:".Data::Dumper->Dump([SCR->Error(".krb5_conf")]));
+                my $err = SCR->Error(".krb5_conf");
+                y2error("Error on writing to krb5.conf:".Data::Dumper->Dump([$err]));
+                $errorMsg = _("Cannot write krb5.conf.");
+                $errorDetails = $err->{summary};
                 return 0;
             }
             $ret = SCR->Write(".krb5_conf", undef);
             if(not $ret)
             {
+                my $err = SCR->Error(".krb5_conf");
                 y2error("Error on writing to krb5.conf:".Data::Dumper->Dump([SCR->Error(".krb5_conf")]));
+                $errorMsg = _("Cannot write krb5.conf.");
+                $errorDetails = $err->{summary};
                 return 0;
             }
 
@@ -1991,6 +2101,8 @@ sub WriteDatabase
             my $pid = open3(\*IN, \*OUT, \*ERR, "/usr/lib/mit/sbin/kdb5_util", @cmdArgs)
             or do {
                 y2error("Can not execute kdb5_util: $!");
+                $errorMsg = _("Cannot execute kdb5_util .");
+                $errorDetails = "$!";
                 return 0;
             };
             
@@ -2021,10 +2133,11 @@ sub WriteDatabase
             my $code = ($?>>8);
             if($code != 0)
             {
+                $errorMsg = _("Creating kerberos database failed.");
+                $errorDetails = "$err";
                 return 0;
             }
 
-    
             $ret = 1;
         }
         elsif($dbtype eq "ldap")
@@ -2091,7 +2204,9 @@ sub WriteDatabase
         }
         else
         {
-            y2error("currently not supported");
+            y2error("Unsupported database type $dbtype .");
+            $errorMsg = _("Unsupported database type.");
+            $errorDetails = "'$dbtype' is not supported.";
             return 0;
         }
 
@@ -2175,6 +2290,10 @@ sub Read
     
     y2milestone("Read called");
     
+    # clean error
+    $errorMsg = undef;
+    $errorDetails = "";
+    
 
     # KerberosServer read dialog caption
     my $caption = __("Initializing kerberos-server Configuration");
@@ -2225,6 +2344,8 @@ sub Read
     if($?)
     {
         y2error("Cannot read hostname");
+        $errorMsg = _("Cannot read hostname.");
+        $class->showError();
         return 0;
     }
     chomp($hostname);
@@ -2233,6 +2354,8 @@ sub Read
     if($?)
     {
         y2error("Cannot read domain");
+        $errorMsg = _("Cannot read domain");
+        $class->showError();
         return 0;
     }
     chomp($domain);
@@ -2244,14 +2367,10 @@ sub Read
     $ret = $class->ReadDatabase();
     if(!$ret)
     {
+        $class->showError();
         return $ret;
     }
     
-    # Error message
-    if(0)
-    {
-	Report::Error(__("Cannot read the database2."));
-    }
     sleep($sl);
 
     $modified = 0;
@@ -2268,6 +2387,10 @@ sub Write
     my $class = shift;
 
     y2milestone("Write called");
+
+    # clean error
+    $errorMsg = undef;
+    $errorDetails = "";
 
     # KerberosServer read dialog caption
     my $caption = __("Saving kerberos-server Configuration");
@@ -2309,8 +2432,9 @@ sub Write
     my $ret = $class->WriteDatabase();
     
     # Error message
-    if(not $ret)
+    if(!$ret)
     {
+        $class->showError();
         return $ret;
     }
     sleep($sl);
