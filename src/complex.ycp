@@ -202,6 +202,7 @@ symbol AskBasicDialog(boolean adv) {
 
 	if(adv)
 	{
+		/* Button text */
 		advButton = `PushButton(`id(`advanced), _("&Advanced Configuration"));
 	}
 
@@ -215,8 +216,12 @@ symbol AskBasicDialog(boolean adv) {
 	
     term content = `HBox ( `HSpacing (3), `VBox (
                      `VSpacing (0.5),
+					 /* Frame lable */
                      `Frame (_("Basic Kerberos Settings"),
                        `VBox(
+							 /* TextEntry label: "Realm" is a typical kerberos phrase.
+								Please think twice please before you translate this,
+								and check with kerberos.pot how it is translated there. */
 							 `TextEntry (`id (`realm), _("Realm"), KerberosServer::getDBrealm()),
 							 `Password  (`id (`pw1), Label::Password(), KerberosServer::getDBpassword()),
 							 `Password  (`id (`pw2), Label::ConfirmPassword(), KerberosServer::getDBpassword())
@@ -224,7 +229,7 @@ symbol AskBasicDialog(boolean adv) {
                      ),
 					 advButton,
 					 `VSpacing( 1 ),
-					 // Frame label
+					 /* Frame label */
 					 `Frame(_("Firewall Settings"),
 							firewall_widget["custom_widget"]:`Empty()
 						   )
@@ -324,9 +329,10 @@ symbol AskLdapDialog(boolean init) {
 	{
 		KerberosServer::CalcDefaultLdapValues();
 	}
-		
+	/* TextEntry label */
 	term ldapServerTl = `TextEntry (`id (`server), _("LDAP Server URI:"), KerberosServer::getLdapDBvalue("ldap_server"));
 	term pwCheckbox1  = `Empty();
+	/* TextEntry label */
 	term kadmindnW = `TextEntry (`id (`kadmin), _("Kadmin Bind DN:"),
 								 KerberosServer::getLdapDBvalue("ldap_kadmind_dn"));
 	term kadminpw1 = `HBox(`Password  (`id (`kadminpw1), Label::Password(), KerberosServer::getLdapKadmPw()),
@@ -351,14 +357,18 @@ symbol AskLdapDialog(boolean init) {
 	
     term content = `HBox ( `HSpacing (3), `VBox (
 						 `VSpacing (0.5),
+						 /* Frame label */
 						 `Frame (_("LDAP Settings"),
 						 `VBox(
 							   ldapServerTl,
+							   /* TextEntry label */
 							   `TextEntry (`id (`basedn), _("LDAP base DN:"),
 										   KerberosServer::getLdapBaseDN()),
+							   /* TextEntry label */
 							   `TextEntry (`id (`container), _("Kerberos Container DN:"),
 										   KerberosServer::getLdapDBvalue("ldap_kerberos_container_dn")),
 							   `HBox(
+									 /* TextEntry label */
 									 `TextEntry (`id (`kdcadmin), _("KDC Bind DN:"),
 												 KerberosServer::getLdapDBvalue("ldap_kdc_dn")),
 									 pwCheckbox1
@@ -372,6 +382,7 @@ symbol AskLdapDialog(boolean init) {
 							   //kadminpw2							   
 							  )
 								),
+						 /* Button text */
 						 `PushButton(`id(`advanced), _("Advanced Configuration"))
 												)
 						 );
