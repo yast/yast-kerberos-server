@@ -30,7 +30,7 @@ COPYRIGHT_files_yast	= YAST_LICENSE README COPYING COPYRIGHT.english \
 
 extra_COPYRIGHT_files =  $(if $(HAS_YAST_LICENSE), $(COPYRIGHT_files_yast), $(COPYRIGHT_files_gpl))
 
-AUTOMAKE_OPTIONS = foreign dist-bzip2
+AUTOMAKE_OPTIONS = foreign dist-bzip2 no-dist-gzip
 # where devtools instal m4 snippets
 # argh, executed literally
 #ACLOCAL_AMFLAGS = -I $(Y2DEVTOOLS_PREFIX)/share/aclocal
@@ -210,8 +210,7 @@ checkin-stable: package
 
 # For po/ modules
 checkpo:
-	test ! -d $(srcdir)/po || $(MAKE) -C po checkpo
-#	test ! -d $(srcdir)/po \
-#	  || { $(MAKE) -C po checkpo && $(MAKE) -C po make-pox; }
+	test ! -f $(srcdir)/po/Makefile || $(MAKE) -C po checkpo
+#	test ! -f $(srcdir)/po/Makefile || $(MAKE) -C po checkpo make-pox
 # No ./SUBDIRS file found - assuming default: All direct subdirs with Makefile.am
 SUBDIRS = agents doc src testsuite 
