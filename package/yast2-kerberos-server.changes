@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Nov 20 16:34:50 CET 2007 - mc@suse.de
+
+- version 2.16.0
+- display errors during Read and Write 
+
+-------------------------------------------------------------------
 Mon Nov 19 17:30:57 CET 2007 - mc@suse.de
 
 - fixing wrong default URL [#340912]
