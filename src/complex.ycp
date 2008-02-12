@@ -105,7 +105,7 @@ symbol AskDBtypeDialog() {
 	term content = `HVCenter(
   				   `HVSquash(
 					  /* Button group label */
-                      `Frame( "Select the database backend you want to use",
+                      `Frame(_("Select the database backend you want to use"),
                         `RadioButtonGroup( `id(`rb), 
                           `VBox(
 								// Checkbox text
@@ -352,7 +352,7 @@ symbol AskLdapDialog(boolean init) {
 		
 		pwCheckbox1 = `CheckBox( `id(`kdc_use_kdcpw), `opt (`notify),
 								// Checkbox text
-								"Use previously entered password", true);
+								_("Use previously entered password"), true);
 	}
 	
     term content = `HBox ( `HSpacing (3), `VBox (
