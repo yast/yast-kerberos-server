@@ -15,13 +15,35 @@ YaST::YCP::Import ("SCR");
 
 y2milestone("execute kadmin SCR");
 
+my $ret = SCR->Execute(".kadmin.initialized");
+if(!$ret)
+{
+    print "CORRECT: at this point the agent is not initialized\n";
+}
+else
+{
+    print "ERROR: the agent cannot be initialized at this point\n";
+    exit 1;
+}
+
+###################################################################
+
 my $kadmin_args  = { "princ"   => "admin/admin", 
                      "adminpw" => "system",
                    };
-my $ret = SCR->Execute(".kadmin.init", $kadmin_args);
+$ret = SCR->Execute(".kadmin.init", $kadmin_args);
 if(!defined $ret)
 {
     print "ERROR: ".Data::Dumper->Dump([SCR->Error(".kadmin")])."\n";
+    exit 1;
+}
+
+###################################################################
+
+$ret = SCR->Execute(".kadmin.initialized");
+if(!$ret)
+{
+    print "ERROR: The agent is not initialized\n";
     exit 1;
 }
 
