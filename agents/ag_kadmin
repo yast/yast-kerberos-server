@@ -44,18 +44,36 @@ sub Execute
     my $class    = shift || return undef;
     my $path     = shift || return $class->SetError(summary => "Missing 'path'",
                                                     code => "PARAM_CHECK_FAILED");
-    my $args     = shift || return $class->SetError(summary => "Missing 'args'",
-                                                    code => "PARAM_CHECK_FAILED");
+    my $args     = shift || undef;
     my $ret      = undef;
     
+    if($path eq ".initialized")
+    {
+        y2milestone("Call initialized");
+        if(! defined $adminpw || ! defined $local)
+        {
+            return 0;
+        }
+        else
+        {
+            return 1;
+        }
+    }
+    
+    if(!defined $args)
+    {
+        return $class->SetError(summary => "Missing 'args'",
+                                code => "PARAM_CHECK_FAILED");
+    }
+    
     y2debug("Execute '$path' with args: ".Data::Dumper->Dump([$args]));
-
+    
     if($path eq ".init")
     {
         y2milestone("Call init");
         return init($class, $args);
     }
-    
+
     if(! defined $adminpw || ! defined $local)
     {
         return $class->SetError(summary => "Agent not initialized",
@@ -739,6 +757,12 @@ B<admin_server> - use the specified admin server <hostname>:<port>
 B<princ> - authenticate with the specified principal
 
 B<adminpw> - administrator password
+
+
+=item *
+B<.initialized>
+
+return true, is the agent is initialized, otherwise false.
 
 
 =item *
