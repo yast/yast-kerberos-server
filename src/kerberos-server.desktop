@@ -21,3 +21,4 @@ Exec=/sbin/yast2 kerberos-server
 Name=KerberosServer
 GenericName=kerberos-server
 X-KDE-SubstituteUID=true
+StartupNotify=true
