@@ -216,10 +216,10 @@ as KDC Master password is also used for the LDAP administrator. ") +
 	"adv_master_key_name" : _("<p>This string specifies the name of the principal associated with the master key. The default value is K/M.</p>"),
 	
 	/* advanced item help : master_key_type*/
-	"adv_master_key_type" : _("<p>This key type string represents the master key's key type.</p>"),
+	"adv_master_key_type" : _("<p>This key type string represents the master keys key type.</p>"),
 	
 	/* advanced item help : max_life*/
-	"adv_max_life" : _("<p>This delta time specifes the maximum time period that a ticket may be valid for in this realm.</p>"),
+	"adv_max_life" : _("<p>This delta time specifies the maximum time period that a ticket may be valid for in this realm.</p>"),
 	/* advanced item help : max_renew_life*/
 	"adv_max_renew_life" : _("<p>This delta time specifies the maximum time period that a ticket may be renewed for in this realm.</p>"),
 
