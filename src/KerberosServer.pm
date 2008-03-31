@@ -1339,7 +1339,7 @@ sub initLDAP
        $ldapdb->{ldap_kadmind_dn} eq "")
     {
         y2error("No bind DN available");
-        $errorMsg = _("No bind DN availbale.");
+        $errorMsg = _("No bind DN available.");
         return 0;
     }
     
@@ -1874,7 +1874,7 @@ sub ModifyLdapEntries
        $ldapdb->{ldap_kadmind_dn} eq "")
     {
         y2error("No bind DN available");
-        $errorMsg = _("No bind DN availbale.");
+        $errorMsg = _("No bind DN available.");
         return 0;
     }
 
@@ -1965,7 +1965,7 @@ sub ModifyLdapEntries
     my $code = ($?>>8);
     if($code != 0)
     {
-        $errorMsg = _("Modifing the kerberos database failed.");
+        $errorMsg = _("Modifying the kerberos database failed.");
         $errorDetails = "$err";
         return 0;
     }

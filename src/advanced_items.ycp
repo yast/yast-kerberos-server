@@ -693,9 +693,9 @@ define list get_adv_itemlist() {
 	// Treeview list item
 	itemlist = add(itemlist, `item(`id(`max_renewable_life), _("Maximum Ticket Renew Time")));
 	// Treeview list item
-	itemlist = add(itemlist, `item(`id(`supported_enctypes), _("Default Encrytion Types")));
+	itemlist = add(itemlist, `item(`id(`supported_enctypes), _("Default Encryption Types")));
 	// Treeview list item
-	itemlist = add(itemlist, `item(`id(`kdc_supported_enctypes), _("KDC Supported Encrytion Types")));
+	itemlist = add(itemlist, `item(`id(`kdc_supported_enctypes), _("KDC Supported Encryption Types")));
 	// Treeview list item
 	itemlist = add(itemlist, `item(`id(`reject_bad_transit), _("Reject Bad Transit")));
 
@@ -968,7 +968,7 @@ define map itemMap = $[
 											   "getCallback" : ``(get_adv_max_renewable_life()),
 											   "setCallback" : ``(set_adv_max_renewable_life())
 											  ],
-					   `supported_enctypes : $["name"   : _("Default Encrytion Types"),
+					   `supported_enctypes : $["name"   : _("Default Encryption Types"),
 											   "widget" : `Frame ("",
 																  `VBox(`TextEntry(`id(`id_supported_enctypes), "",
 																				   KerberosServer::getDBvalue("supported_enctypes")),
@@ -979,7 +979,7 @@ define map itemMap = $[
 											   "getCallback" : ``(get_adv_supported_enctypes()),
 											   "setCallback" : ``(set_adv_supported_enctypes())
 											  ],
-					   `kdc_supported_enctypes : $["name"   : _("KDC Supported Encrytion Types"),
+					   `kdc_supported_enctypes : $["name"   : _("KDC Supported Encryption Types"),
 												   "widget" : `Frame ("",
 																	  `VBox(`TextEntry(`id(`id_kdc_supported_enctypes), "",
 																					   KerberosServer::getDBvalue("kdc_supported_enctypes")),
