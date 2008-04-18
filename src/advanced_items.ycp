@@ -841,7 +841,7 @@ define map itemMap = $[
 																			   _("Allow tickets"), false)),
 															   `Left(`CheckBox(`id (`kdc_flags_needchange),
 																			   // checkbox text in MultiSelectionBox
-																			   _("Needchange"), false)),
+																			   _("Need change"), false)),
 															   `Left(`CheckBox(`id (`kdc_flags_password_changing_service),
 																			   // checkbox text in MultiSelectionBox
 																			   _("Password changing service"), false)),
@@ -1126,7 +1126,7 @@ define map itemMap = $[
 																			   _("Allow tickets"), false)),
 															   `Left(`CheckBox(`id (`kdb_flags_needchange),
 																			   // checkbox text in MultiSelectionBox
-																			   _("Needchange"), false)),
+																			   _("Need change"), false)),
 															   `Left(`CheckBox(`id (`kdb_flags_password_changing_service),
 																			   // checkbox text in MultiSelectionBox
 																			   _("Password changing service"), false)),

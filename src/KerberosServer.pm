@@ -595,7 +595,7 @@ sub CheckSchema
     {
         my $ldapERR = SCR->Read(".ldap.error");
         y2error("LDAP schema init failed:".$ldapERR->{'code'}." : ".$ldapERR->{'msg'});
-        $errorMsg = _("Initialize LDAP schema failed.");
+        $errorMsg = _("Initializing LDAP schema failed.");
         $errorDetails = "LDAP message:".$ldapERR->{'code'}." : ".$ldapERR->{'msg'};
         return 0;
     }
@@ -618,7 +618,7 @@ sub CheckSchema
            $schemaMap->{oid} ne $requiredObjectClasses->{$key})
         {
             y2error("Kerberos Schema not known to the LDAP server.");
-            $errorMsg = _("Kerberos Schema not known to the LDAP server.");
+            $errorMsg = _("Kerberos Schema unknown by the LDAP server.");
             return 0;
         }
     }
@@ -801,7 +801,7 @@ sub SetupLdapServer
     if(-e "/var/lib/ldap/__db.001")
     {
         y2error("Database exists. Cannot create a new one.");
-        $errorMsg = _("LDAP database exists. Cannot create a new one.");
+        $errorMsg = _("LDAP database already exists. Cannot create a new one.");
         return 0;
     }
     my $directory = "/var/lib/ldap";
@@ -813,7 +813,7 @@ sub SetupLdapServer
     if (!SCR->Write (".sysconfig.openldap", undef))
     {
         y2error ("error writing /etc/sysconfig/openldap");
-        $errorMsg = _("Cannot write /etc/sysconfig/openldap .");
+        $errorMsg = _("Cannot write <tt>/etc/sysconfig/openldap</tt> .");
         return 0;
     }    
 
@@ -1144,7 +1144,7 @@ sub SetupLdapBackend
     my $code = ($?>>8);
     if($code != 0)
     {
-        $errorMsg = _("Creating kerberos database failed.");
+        $errorMsg = _("Creating Kerberos database failed.");
         $errorDetails = "$err";
         return 0;
     }
@@ -2133,7 +2133,7 @@ sub WriteDatabase
             my $code = ($?>>8);
             if($code != 0)
             {
-                $errorMsg = _("Creating kerberos database failed.");
+                $errorMsg = _("Creating Kerberos database failed.");
                 $errorDetails = "$err";
                 return 0;
             }
@@ -2296,7 +2296,7 @@ sub Read
     
 
     # KerberosServer read dialog caption
-    my $caption = __("Initializing kerberos-server Configuration");
+    my $caption = __("Initializing Kerberos server configuration");
 
     my $steps = 2;
 
@@ -2354,7 +2354,7 @@ sub Read
     if($?)
     {
         y2error("Cannot read domain");
-        $errorMsg = _("Cannot read domain");
+        $errorMsg = _("Cannot read domain.");
         $class->showError();
         return 0;
     }
@@ -2393,7 +2393,7 @@ sub Write
     $errorDetails = "";
 
     # KerberosServer read dialog caption
-    my $caption = __("Saving kerberos-server Configuration");
+    my $caption = __("Saving Kerberos server configuration");
 
     my $steps = 2;
 
@@ -2403,12 +2403,12 @@ sub Write
     # We do not set help text here, because it was set outside
     Progress->New($caption, " ", $steps, [
 	    # Progress stage 1/2
-	    __("Write Firewall settings"),
+	    __("Write firewall settings"),
 	    # Progress stage 2/2
 	    __("Write Kerberos settings"),
 	], [
 	    # Progress step 1/2
-	    __("Writing Firewall settings..."),
+	    __("Writing firewall settings..."),
 	    # Progress step 2/2
 	    __("Writing Kerberos settings..."),
 	    # Progress finished

@@ -51,7 +51,7 @@ include "kerberos-server/wizards.ycp";
 map cmdline_description = $[
     "id" 	: "kerberos-server",
     /* Command line help text for the Xkerberos-server module */
-    "help"	: _("Configuration of kerberos-server"),
+    "help"	: _("Configuration of Kerberos server"),
     "guihandler"        : KerberosServerSequence,
     "initialize"        : KerberosServer::Read,
     "finish"            : KerberosServer::Write,
