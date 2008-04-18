@@ -37,7 +37,7 @@ textdomain "kerberos-server";
 map HELPS = $[
 
     /* Read dialog help 1/2 */
-    "read" : _("<p><b><big>Initializing kerberos-server Configuration</big></b><br>
+    "read" : _("<p><b><big>Initializing Kerberos Server Configuration</big></b><br>
 Please wait...<br></p>
 ") +
 
@@ -47,7 +47,7 @@ Safely abort the configuration utility by pressing <b>Abort</b> now.</p>
 "),
 
     /* Write dialog help 1/2 */
-    "write" : _("<p><b><big>Saving kerberos-server Configuration</big></b><br>
+    "write" : _("<p><b><big>Saving Kerberos Server Configuration</big></b><br>
 Please wait...<br></p>
 ") +
 
@@ -58,55 +58,59 @@ An additional dialog informs whether it is safe to do so.
 </p>
 "),
 	/* Help text: ask for database backend 1/4 */
-	"AskDBtype" : _("<p>Here you specify where the kerberos server should store the data.</p>") +
+	"AskDBtype" : _("<p>Here you specify where the Kerberos server should store the data.</p>") +
 
 	/* Help text: ask for database backend 2/4 */
 	_("<p><big>Local Database</big> will create a local database for storing the credentials.</p>") + 
 
 	/* Help text: ask for database backend 3/4 */
-	_("<p><big>Setup new LDAP server as database backend</big> will setup a new LDAP server
-on this machine and use it as database backend.</p>") + 
+	_("<p><big>Set Up New LDAP Server as Database Back-End</big> will set up a new LDAP server
+on this machine and use it as database back-end.</p>
+") + 
 
 	/* Help text: ask for database backend 4/4 */
-	_("<p><big>Use existing LDAP server as database backend</big> gives you the possibility 
-to use an external LDAP server as database backend.</p>"),
+	_("<p><big>Use Existing LDAP Server as Database Back-End</big> gives you the possibility 
+to use an external LDAP server as database back-end.</p>
+"),
 
 
 	/* Help text: basic settings 1/2 */
-	"basic" : _("<p>Here you can specify the <big>Realm</big> and the <big>Master Password</big> for your kerberos server.</p>") +
+	"basic" : _("<p>Here you can specify the <big>Realm</big> and the <big>Master Password</big> for your Kerberos server.</p>") +
 
 	/* Help text: basic settings 2/2 */
-	_("<p>Although your Kerberos realm can be any ASCII string, convention is to make
-it the same as your domain name, in upper-case letters.</p>"),
+	_("<p>Although your Kerberos realm can be any ASCII string, the convention is to use upper-case letters as in your domain name.</p>
+"),
 
 
 	/* Help text: Use existing LDAP server 1/6 */
 	"useldap" : _("<p>In this dialog, edit some parameters for the LDAP server.<p>") +
 
 	/* Help text: Use existing LDAP server 2/6 */
-	_("<p><big>LDAP Server URI</big> specify the location of the LDAP server. E.g. ldaps://host.domain.com .</p>") +
+	_("<p><big>LDAP Server URI</big> specify the location of the LDAP server.For example,<tt>ldaps://host.domain.com</tt> .</p>") +
 	
 	/* Help text: Use existing LDAP server 3/6 */
-	_("<p>With <big>LDAP base DN</big> you can change the base DN of the LDAP server.</p>") +
+	_("<p>With <big>LDAP Base DN</big> you can change the base DN of the LDAP server.</p>") +
 
 	/* Help text: Use existing LDAP server 4/6 */
 	_("<p>The <big>Kerberos Container DN</big> specifies the container where the Kerberos server should create 
 the principals and other informational data by default.</p>") +
 
 	/* Help text: Use existing LDAP server 5/6 */
-	_("<p><big>KDC Bind DN</big> is the DN, the KDC authenticates with to the LDAP server.
-Only read access is required for this account.</p>") +
+	_("<p><big>KDC Bind DN</big> is the DN that KDC uses to authenticate to the LDAP server.
+Only read access is required for this account.</p>
+") +
 
 	/* Help text: Use existing LDAP server 6/6 */
-	_("<p><big>Kadmin Bind DN</big> is the DN, the Kadmind authenticates with to the LDAP server.
-This account needs also write access.</p>"),
+	_("<p><big>Kadmin Bind DN</big> is the DN that Kadmind uses to authenticate to the LDAP server.
+This account needs also write access.</p>
+"),
 
 	
 	/* Help text: New LDAP server 1/6 */
-	"newldap" : _("<p>In this dialog, edit some parameters to setup an LDAP server.<p>") +
+	"newldap" : _("<p>In this dialog, edit some parameters to set up an LDAP server.<p>") +
 
 	/* Help text: New LDAP server 2/6 */
-	_("<p>With <big>LDAP base DN</big> you can change the base DN of the LDAP server.</p>") +
+	_("<p>With <big>LDAP Base DN</big> you can change the base DN of the LDAP server.</p>") +
 
 	/* Help text: New LDAP server 3/6 */
 	_("<p>The <big>Kerberos Container DN</big> specify the container where the Kerberos server should create 
@@ -116,21 +120,22 @@ the principals and other informational data by default.</p>") +
 	_("<p><big>KDC Bind DN</big> is the DN for the administrator.</p>") +
 
 	/* Help text: New LDAP server 5/6 */
-	_("<p>When selecting the checkbox <big>Use previously entered password</big> the password you entered
-as KDC Master password is also used for the LDAP administrator. ") +
+	_("<p>If you select the checkbox <big>Use Previously Entered Password</big>, the password you entered
+as the KDC Master password is also used for the LDAP administrator. 
+") +
 
 	/* Help text: New LDAP server 6/6 */
-	_("When the checkbox is not set you can enter a different password for the LDAP administrator.</p>"),
+	_("When the checkbox is not set, you can enter a different password for the LDAP administrator.</p>"),
 
 
 	/* Help text: Summary 1/3 */
-	"summary" : _("<p>This is a short summary about your kerberos server configuration.</p>") +
+	"summary" : _("<p>This is a short summary about your Kerberos server configuration.</p>") +
 
 	/* Help text: Summary 2/3 */
-	_("<p>With the radio buttons you can enable or disable this service</p>") +
+	_("<p>With the radio buttons you can enable or disable this service.</p>") +
 
 	/* Help text: Summary 3/3 */
-	_("<p>When you click on the <big>Edit</big> Button you can change some values of your configuration.</p>"),
+	_("<p>You can change some values of your configuration by clicking the <b>Edit</b> button.</p>"),
 	
 	/* ============================================================================== */
 	
@@ -138,16 +143,16 @@ as KDC Master password is also used for the LDAP administrator. ") +
 	"adv_database_name" : _("<p>This string specifies the location of the Kerberos database for this realm.</p>"),
 
     /* advanced item help: acl_file*/
-	"adv_acl_file" : _("<p>This  string specifies the location of the access control list (acl) file that kadmin uses to determine which principals are allowed which permissions on the database.</p>"),
+	"adv_acl_file" : _("<p>This string specifies the location of the access control list (acl) file that kadmin uses to determine the principals' permissions on the database.</p>"),
 	
 	/* advanced item help: admin_keytab */
-	"adv_admin_keytab" : _("<p>This  string  Specifies  the  location  of  the  keytab  file  that  kadmin  uses  to  authenticate  to  the  database.</p>"),
+	"adv_admin_keytab" : _("<p>This string specifies the location of the keytab file that kadmin uses to authenticate to the database.</p>"),
 
 	/* advanced item help: default_principal_expiration */
 	"adv_default_principal_expiration" : _("<p>This absolute time specifies the default expiration date of principals created in this realm.</p>"),
 
 	/* advanced item help principal_flags 1/13 */
-	"adv_default_principal_flags" : _("<p>These flags specifies the default attributes of principals created in this realm.</p>") +
+	"adv_default_principal_flags" : _("<p>These flags specifie the default attributes of principals created in this realm.</p>") +
 
 	"<ul><li><b>"+_("Allow postdated")+"</b> "+
     /* advanced item help principal_flags 2/13 :Allow postdated*/
@@ -171,11 +176,11 @@ as KDC Master password is also used for the LDAP administrator. ") +
 
 	"<li><b>"+_("Requires preauth")+"</b> "+
 	/* advanced item help principal_flags 7/13 :Requires preauth*/
-	_("If this flag is enabled on a client principal, then that principal is required to preauthenticate to the KDC before receiving any  tickets. On a service principal, enabling this flag means that service tickets for this principal will only be issued to clients with a TGT that has the preauthenticated ticket set.")+"</li>" +
+	_("If this flag is enabled on a client principal, that principal is required to preauthenticate to the KDC before receiving any tickets. If you enable this flag on a service principal, the service tickets for this principal will only be issued to clients with a TGT that has the preauthenticated ticket set.")+"</li>" +
 
 	"<li><b>"+_("Requires hwauth")+"</b> "+
 	/* advanced item help principal_flags 8/13 :Requires hwauth*/
-	_("If this flag is enabled, then the principal is required to preauthenticate using a hardware device before receiving any tickets.")+"</li>" +
+	_("If this flag is enabled, the principal is required to preauthenticate using a hardware device before receiving any tickets.")+"</li>" +
 
 	"<li><b>"+_("Allow service")+"</b> "+
 	/* advanced item help principal_flags 9/13 :Allow service*/
@@ -189,7 +194,7 @@ as KDC Master password is also used for the LDAP administrator. ") +
 	/* advanced item help principal_flags 11/13 :Allow tickets*/
 	_("Enabling  this  flag  means  that the KDC will issue tickets for this principal. Disabling this flag essentially deactivates the principal within this realm.")+"</li>" +
 
-	"<li><b>"+_("Needchange")+"</b> "+
+	"<li><b>"+_("Need change")+"</b> "+
 	/* advanced item help principal_flags 12/13 :Needchange*/
 	_("Enabling this flag forces a password change for this principal.")+"</li>" +
 
@@ -198,19 +203,19 @@ as KDC Master password is also used for the LDAP administrator. ") +
 	_("If this flag is enabled, it marks this principal as a password change service.  This should only be used in special cases, for example,  if a  user's  password  has  expired,  the user has to get tickets for that principal to be able to change it without going through the normal password authentication.")+"</li></ul>",
 
 	/* advanced item help : dict_file*/
-	"adv_dict_file" : _("<p>This string location of the dictionary file containing strings that are not allowed as passwords.  If this tag is not set or if there is no policy assigned to the principal, then no check will be done.</p>"),
+	"adv_dict_file" : _("<p>This string location of the dictionary file containing strings that are not allowed as passwords. If this tag is not set or if there is no policy assigned to the principal, no check will be done.</p>"),
 	
 	/* advanced item help : kadmind_port*/
-	"adv_kadmind_port" : _("<p>This port number specifies the port on which the kadmind daemon is to listen for this realm.</p>"),
+	"adv_kadmind_port" : _("<p>This port number specifies the port on which the kadmind daemon listens for this realm.</p>"),
 	
 	/* advanced item help : kpasswd_port*/
-	"adv_kpasswd_port" : _("<p>This port number specifies the port on which the kadmind daemon is to listen for this realm.</p>"),
+	"adv_kpasswd_port" : _("<p>This port number specifies the port on which the kadmind daemon listens for this realm.</p>"),
 	
 	/* advanced item help : key_stash_file*/
 	"adv_key_stash_file" : _("<p>This string specifies the location where the master key has been stored with kdb5_stash.</p>"),
 	
 	/* advanced item help : kdc_ports*/
-	"adv_kdc_ports" : _("<p>This  string  specifies the list of ports that the KDC is to listen to for this realm.</p>"),
+	"adv_kdc_ports" : _("<p>This string specifies the list of ports that the KDC listens to for this realm.</p>"),
 	
 	/* advanced item help : master_key_name*/
 	"adv_master_key_name" : _("<p>This string specifies the name of the principal associated with the master key. The default value is K/M.</p>"),
@@ -224,16 +229,16 @@ as KDC Master password is also used for the LDAP administrator. ") +
 	"adv_max_renew_life" : _("<p>This delta time specifies the maximum time period that a ticket may be renewed for in this realm.</p>"),
 
 	/* advanced item help : supported_enctypes*/
-	"adv_supported_enctypes" : _("<p>A List of key:salt strings that specifies the default key/salt combinations of principals for this realm.</p>"),
+	"adv_supported_enctypes" : _("<p>A list of key:salt strings that specifies the default key/salt combinations of principals for this realm.</p>"),
 
 	/* advanced item help : kdc_supported_enctypes*/
-	"adv_kdc_supported_enctypes" : _("<p>Specifies the permitted key-salt combinations of principals for this realm.</p>"),
+	"adv_kdc_supported_enctypes" : _("<p>Specifies the permitted key/salt combinations of principals for this realm.</p>"),
 	
 	/* advanced item help : reject_bad_transit*/
 	"adv_reject_bad_transit" : _("<p>Specifies whether or not the list of transited realms for cross-realm tickets should be checked against the transit path computed from the realm names and the [capaths] section of its krb5.conf file</p>"),
 	
 	/* advanced item help : ldap_conns_per_server*/
-	"adv_ldap_conns_per_server" : _("<p>This LDAP specific tag indicates the number of connections to be maintained per LDAP server.</p>"),
+	"adv_ldap_conns_per_server" : _("<p>This LDAP specific tag indicates the number of connections to be maintained via LDAP server.</p>"),
 	
 	/* advanced item help : ldap_service_password_file*/
 	"adv_ldap_service_password_file" : _("<p>This LDAP specific tag indicates the file containing the stashed passwords for the objects used for starting the Kerberos servers.</p>"),

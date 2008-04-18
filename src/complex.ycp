@@ -100,20 +100,20 @@ symbol AskDBtypeDialog() {
     Wizard::RestoreHelp(HELPS["AskDBtype"]:"");
 
     /* caption */
-    string caption = _("Select the Database Backend");
+    string caption = _("Select the Database Back-End");
 	
 	term content = `HVCenter(
   				   `HVSquash(
 					  /* Button group label */
-                      `Frame(_("Select the database backend you want to use"),
+                      `Frame(_("Select the database back-end you want to use"),
                         `RadioButtonGroup( `id(`rb), 
                           `VBox(
 								// Checkbox text
 								`Left (`RadioButton( `id( `file),    `opt (`notify), _("&Local Database"), true)),
 								// Checkbox text
-								`Left (`RadioButton( `id( `newldap), `opt (`notify), _("&Setup new LDAP server as database backend"))),
+								`Left (`RadioButton( `id( `newldap), `opt (`notify), _("&Set up new LDAP server as database back-end"))),
 								// Checkbox text
-								`Left (`RadioButton( `id( `useldap), `opt (`notify), _("&Use existing LDAP server as database backend")))
+								`Left (`RadioButton( `id( `useldap), `opt (`notify), _("&Use existing LDAP server as database back-end")))
 							   )
 							 )
 							)
@@ -317,7 +317,7 @@ Try again."));
 symbol AskLdapDialog(boolean init) {
 
     /* caption */
-    string caption = _("Kerberos Setting for the LDAP Backend");
+    string caption = _("Kerberos Setting for the LDAP Back-End");
 	
 	string help = HELPS["useldap"]:"";
 		
@@ -669,7 +669,7 @@ symbol AdvancedConfiguration(boolean ldap)
 symbol SummaryDialog() {
 
     /* KerberosServer summary dialog caption */
-    string caption = _("KerberosServer Configuration");
+    string caption = _("Kerberos Server Configuration");
 
     list summary = KerberosServer::Summary();
 	string configured = summary[0]:"";
