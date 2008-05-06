@@ -83,7 +83,7 @@ to use an external LDAP server as database back-end.</p>
 
 
 	/* Help text: Use existing LDAP server 1/6 */
-	"useldap" : _("<p>In this dialog, edit some parameters for the LDAP server.<p>") +
+	"useldap" : _("<p>In this dialog, edit some parameters for the LDAP server.</p>") +
 
 	/* Help text: Use existing LDAP server 2/6 */
 	_("<p><big>LDAP Server URI</big> specify the location of the LDAP server.For example,<tt>ldaps://host.domain.com</tt> .</p>") +
@@ -107,7 +107,7 @@ This account needs also write access.</p>
 
 	
 	/* Help text: New LDAP server 1/6 */
-	"newldap" : _("<p>In this dialog, edit some parameters to set up an LDAP server.<p>") +
+	"newldap" : _("<p>In this dialog, edit some parameters to set up an LDAP server.</p>") +
 
 	/* Help text: New LDAP server 2/6 */
 	_("<p>With <big>LDAP Base DN</big> you can change the base DN of the LDAP server.</p>") +
