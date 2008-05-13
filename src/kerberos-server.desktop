@@ -18,7 +18,7 @@ X-SuSE-YaST-AutoInstResource=kerberos-server
 Icon=yast-kerberos
 Exec=/sbin/yast2 kerberos-server 
 
-Name=KerberosServer
+Name=Kerberos Server
 GenericName=kerberos-server
 X-KDE-SubstituteUID=true
 StartupNotify=true
