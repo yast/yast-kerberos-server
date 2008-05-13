@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue May 13 16:50:42 CEST 2008 - mc@suse.de
+
+- 2.16.4
+- fix name in desktop file
+- strech the password entries 
+
+-------------------------------------------------------------------
 Tue May  6 10:39:57 CEST 2008 - mc@suse.de
 
 - fix typos in help text (bnc#384196) 
