@@ -77,7 +77,7 @@ define void get_adv_default_principal_expiration() ``{
 	UI::ChangeWidget(`id(`id_default_principal_expiration_available), `Value, (datetime == "")?false:true);
 
 	list<string> dt = KerberosServer::decodeDateTime(datetime);
-	
+
 	UI::ChangeWidget(`id(`id_default_principal_expiration_date), `Value, dt[0]:"2007-01-01");
 	UI::ChangeWidget(`id(`id_default_principal_expiration_time), `Value, dt[1]:"00:00:00");
 
@@ -752,7 +752,7 @@ define map itemMap = $[
 					   `database_name : $[
 										  "name"   : _("Database Path"),
 										  "widget" : `Frame ("",
-															 `VBox(`TextEntry(`id(`id_database_name),
+															 `VBox(`InputField(`id(`id_database_name),`opt(`hstretch),
 																			  _("&Database Path"),
 																			  KerberosServer::getDBvalue("database_name")),
 																   `VSpacing(1.5),
@@ -764,7 +764,7 @@ define map itemMap = $[
 										 ],
 					   `acl_file : $["name"   : _("ACL File"),
 									 "widget" : `Frame ("",
-														`VBox(`TextEntry(`id(`id_acl_file),
+														`VBox(`InputField(`id(`id_acl_file),`opt(`hstretch),
 																		 _("ACL &File"),
 																		 KerberosServer::getDBvalue("acl_file")),
 															  `VSpacing(1.5),
@@ -776,7 +776,7 @@ define map itemMap = $[
 									],
 					   `admin_keytab : $["name"   : _("Administrator Keytab"),
 										 "widget" : `Frame ("",
-															`VBox(`TextEntry(`id(`id_admin_keytab),"",
+															`VBox(`InputField(`id(`id_admin_keytab),`opt(`hstretch), "",
 																			 KerberosServer::getDBvalue("admin_keytab")),
 																  `VSpacing(1.5),
 																  `RichText( HELPS["adv_admin_keytab"]:"")
@@ -789,15 +789,15 @@ define map itemMap = $[
 														 "widget" : `Frame ("",
 																			`VBox(`Left(`CheckBox(`id(`id_default_principal_expiration_available), `opt(`notify),
 																								  // checkbox text
-																								  _("Available"), true)),
+																								  _("&Available"), true)),
 																				  `HBox(`Date(`id(`id_default_principal_expiration_date),
-																							  _("Date")),
+																							  _("&Date")),
 																						`Time(`id(`id_default_principal_expiration_time),
-																							  _("Time"))
+																							  _("&Time"))
 																					   ),
 																				  /*
 																					 
-																				  `TextEntry(`id(`id_default_principal_expiration),"",
+																				  `InputField(`opt(`hstretch),`id(`id_default_principal_expiration),"",
 																				  KerberosServer::getDBvalue("default_principal_expiration")), */
 																				  `VSpacing(1.5),
 																				  `RichText( HELPS["adv_default_principal_expiration"]:"")
@@ -811,40 +811,40 @@ define map itemMap = $[
 													"widget" :`Frame ("",
 														 `VBox(`Left(`CheckBox(`id (`kdc_flags_allow_postdated),
 																			   // checkbox text in MultiSelectionBox
-																			   _("Allow postdated"), false)),
+																			   _("Allow p&ostdated"), false)),
 															   `Left(`CheckBox(`id (`kdc_flags_allow_forwardable),
 																			   // checkbox text in MultiSelectionBox
-																			   _("Allow forwardable"), false)),
+																			   _("Allow &forwardable"), false)),
 															   `Left(`CheckBox(`id (`kdc_flags_allow_renewable),
 																			   // checkbox text in MultiSelectionBox
-																			   _("Allow renewable"), false)),
+																			   _("Allow rene&wable"), false)),
 															   `Left(`CheckBox(`id (`kdc_flags_allow_proxiable),
 																			   // checkbox text in MultiSelectionBox
-																			   _("Allow proxiable"), false)),
+																			   _("Allow &proxiable"), false)),
 															   `Left(`CheckBox(`id (`kdc_flags_allow_dup_skey),
 																			   // checkbox text in MultiSelectionBox
-																			   _("Enable user-to-user authentication"), false)),
+																			   _("Enable &user-to-user authentication"), false)),
 															   `Left(`CheckBox(`id (`kdc_flags_requires_preauth),
 																			   // checkbox text in MultiSelectionBox
-																			   _("Requires preauth"), false)),
+																			   _("Requires pr&eauth"), false)),
 															   `Left(`CheckBox(`id (`kdc_flags_requires_hwauth),
 																			   // checkbox text in MultiSelectionBox
-																			   _("Requires hwauth"), false)),
+																			   _("Requires &hwauth"), false)),
 															   // checkbox text in MultiSelectionBox
 															   `Left(`CheckBox(`id (`kdc_flags_allow_svr),
-																			   _("Allow service"), false)),
+																			   _("Allow &service"), false)),
 															   `Left(`CheckBox(`id (`kdc_flags_allow_tgs_req),
 																			   // checkbox text in MultiSelectionBox
-																			   _("Allow tgs request"), false)),
+																			   _("Allow tgs re&quest"), false)),
 															   // checkbox text in MultiSelectionBox
 															   `Left(`CheckBox(`id (`kdc_flags_allow_tix),
-																			   _("Allow tickets"), false)),
+																			   _("Allow &tickets"), false)),
 															   `Left(`CheckBox(`id (`kdc_flags_needchange),
 																			   // checkbox text in MultiSelectionBox
-																			   _("Need change"), false)),
+																			   _("Need &change"), false)),
 															   `Left(`CheckBox(`id (`kdc_flags_password_changing_service),
 																			   // checkbox text in MultiSelectionBox
-																			   _("Password changing service"), false)),
+																			   _("P&assword changing service"), false)),
 															   `VSpacing(1.5),
 															   `RichText( HELPS["adv_default_principal_flags"]:"")
 															  )
@@ -855,7 +855,7 @@ define map itemMap = $[
 												   ],
 					   `dict_file : $["name"   : _("Dictionary File"),
 									  "widget" : `Frame ("",
-														 `VBox(`TextEntry(`id(`id_dict_file), "",
+														 `VBox(`InputField(`id(`id_dict_file), `opt(`hstretch), "",
 																		  KerberosServer::getDBvalue("dict_file")),
 															   `VSpacing(1.5),
 															   `RichText( HELPS["adv_dict_file"]:"")
@@ -866,7 +866,7 @@ define map itemMap = $[
 									 ],
 					   `kadmind_port : $["name"   : _("Kadmin Daemon Port"),
 										 "widget" : `Frame ("",
-															`VBox(`TextEntry(`id(`id_kadmind_port), "",
+															`VBox(`InputField(`id(`id_kadmind_port), `opt(`hstretch), "",
 																			 KerberosServer::getDBvalue("kadmind_port")),
 																  `VSpacing(1.5),
 																  `RichText( HELPS["adv_kadmind_port"]:"")
@@ -877,7 +877,7 @@ define map itemMap = $[
 										],
 					   `kpasswd_port : $["name"   : _("Kpasswd Daemon Port"),
 										 "widget" : `Frame ("",
-															`VBox(`TextEntry(`id(`id_kpasswd_port), "",
+															`VBox(`InputField(`id(`id_kpasswd_port), `opt(`hstretch), "",
 																			 KerberosServer::getDBvalue("kpasswd_port")),
 																  `VSpacing(1.5),
 																  `RichText( HELPS["adv_kpasswd_port"]:"")
@@ -888,7 +888,7 @@ define map itemMap = $[
 										],
 					   `key_stash_file : $["name"   : _("Key Stash File"),
 										   "widget" : `Frame ("",
-															  `VBox(`TextEntry(`id(`id_key_stash_file), "",
+															  `VBox(`InputField(`id(`id_key_stash_file), `opt(`hstretch), "",
 																			   KerberosServer::getDBvalue("key_stash_file")),
 																	`VSpacing(1.5),
 																	`RichText( HELPS["adv_key_stash_file"]:"")
@@ -899,7 +899,7 @@ define map itemMap = $[
 										  ],
 					   `kdc_ports : $["name"   : _("KDC Port"),
 									  "widget" : `Frame ("",
-														 `VBox(`TextEntry(`id(`id_kdc_ports), "",
+														 `VBox(`InputField(`id(`id_kdc_ports), `opt(`hstretch), "",
 																		  KerberosServer::getDBvalue("kdc_ports")),
 															   `VSpacing(1.5),
 															   `RichText( HELPS["adv_kdc_ports"]:"")
@@ -910,7 +910,7 @@ define map itemMap = $[
 									 ],
 					   `master_key_name : $["name"   : _("Master Key Name"),
 											"widget" : `Frame ("",
-															   `VBox(`TextEntry(`id(`id_master_key_name), "",
+															   `VBox(`InputField(`id(`id_master_key_name), `opt(`hstretch), "",
 																				KerberosServer::getDBvalue("master_key_name")),
 																	 `VSpacing(1.5),
 																	 `RichText( HELPS["adv_master_key_name"]:"")
@@ -921,7 +921,7 @@ define map itemMap = $[
 										   ],
 					   `master_key_type : $["name"   : _("Master Key Type"),
 											"widget" : `Frame ("",
-															   `VBox(`TextEntry(`id(`id_master_key_type), "",
+															   `VBox(`InputField(`id(`id_master_key_type), `opt(`hstretch), "",
 																				KerberosServer::getDBvalue("master_key_type")),
 																	 `VSpacing(1.5),
 																	 `RichText( HELPS["adv_master_key_type"]:"")
@@ -934,12 +934,12 @@ define map itemMap = $[
 									 "widget" : `Frame ("",
 														`VBox(`Left(`CheckBox(`id(`id_max_life_available), `opt(`notify),
 																			  // checkbox text
-																			  _("Available"), true)),
+																			  _("&Available"), true)),
 															  `HBox(`IntField(`id(`id_max_life_days),
-																			  _("Days"),
+																			  _("&Days"),
 																			  0, 365, 0),
 																	`Time(`id(`id_max_life_time),
-																		  _("Time"))
+																		  _("&Time"))
 																   ),
 															  `VSpacing(1.5),
 															  `RichText( HELPS["adv_max_life"]:"")
@@ -953,12 +953,12 @@ define map itemMap = $[
 											   "widget" : `Frame ("",
 																  `VBox(`Left(`CheckBox(`id(`id_max_renewable_life_available), `opt(`notify),
 																						// checkbox text
-																						_("Available"), true)),
+																						_("&Available"), true)),
 																		`HBox(`IntField(`id(`id_max_renewable_life_days),
-																						_("Days"),
+																						_("&Days"),
 																						0, 365, 0),
 																			  `Time(`id(`id_max_renewable_life_time),
-																					_("Time"))
+																					_("&Time"))
 																			 ),
 																		`VSpacing(1.5),
 																		`RichText( HELPS["adv_max_renew_life"]:"")
@@ -970,7 +970,7 @@ define map itemMap = $[
 											  ],
 					   `supported_enctypes : $["name"   : _("Default Encryption Types"),
 											   "widget" : `Frame ("",
-																  `VBox(`TextEntry(`id(`id_supported_enctypes), "",
+																  `VBox(`InputField(`id(`id_supported_enctypes), `opt(`hstretch), "",
 																				   KerberosServer::getDBvalue("supported_enctypes")),
 																		`VSpacing(1.5),
 																		`RichText( HELPS["adv_supported_enctypes"]:"")
@@ -981,7 +981,7 @@ define map itemMap = $[
 											  ],
 					   `kdc_supported_enctypes : $["name"   : _("KDC Supported Encryption Types"),
 												   "widget" : `Frame ("",
-																	  `VBox(`TextEntry(`id(`id_kdc_supported_enctypes), "",
+																	  `VBox(`InputField(`id(`id_kdc_supported_enctypes), `opt(`hstretch), "",
 																					   KerberosServer::getDBvalue("kdc_supported_enctypes")),
 																			`VSpacing(1.5),
 																			`RichText( HELPS["adv_kdc_supported_enctypes"]:"")
@@ -992,7 +992,7 @@ define map itemMap = $[
 												  ],
 					   `reject_bad_transit : $["name"   : _("Reject Bad Transit"),
 											   "widget" : `Frame ("",
-																  `VBox(`TextEntry(`id(`id_reject_bad_transit), "",
+																  `VBox(`InputField(`id(`id_reject_bad_transit), `opt(`hstretch), "",
 																				   KerberosServer::getDBvalue("reject_bad_transit")),
 																		`VSpacing(1.5),
 																		`RichText( HELPS["adv_reject_bad_transit"]:"")
@@ -1003,7 +1003,7 @@ define map itemMap = $[
 											  ],
 					   `ldap_conns_per_server : $["name"   : _("Number of LDAP connections"),
 												  "widget" : `Frame ("",
-																	 `VBox(`TextEntry(`id(`id_ldap_conns_per_server), "",
+																	 `VBox(`InputField(`id(`id_ldap_conns_per_server), `opt(`hstretch), "",
 																					  KerberosServer::getLdapDBvalue("ldap_conns_per_server")),
 																		   `VSpacing(1.5),
 																		   `RichText( HELPS["adv_ldap_conns_per_server"]:"")
@@ -1014,7 +1014,7 @@ define map itemMap = $[
 												 ],
 					   `ldap_service_password_file : $["name"   : _("File for the LDAP password"),
 												  "widget" : `Frame ("",
-																	 `VBox(`TextEntry(`id(`id_ldap_service_password_file), "",
+																	 `VBox(`InputField(`id(`id_ldap_service_password_file), `opt(`hstretch), "",
 																					  KerberosServer::getLdapDBvalue("ldap_service_password_file")),
 																		   `VSpacing(1.5),
 																		   `RichText( HELPS["adv_ldap_service_password_file"]:"")
@@ -1025,15 +1025,15 @@ define map itemMap = $[
 												 ],
 					   `kdb_subtrees : $["name"   : _("Search Subtrees"),
 										 "widget" : `Frame ("",
-															`VBox(`TextEntry(`id(`id_kdb_subtrees), "",
+															`VBox(`InputField(`id(`id_kdb_subtrees), `opt(`hstretch), "",
 																			 KerberosServer::getKdbvalue("kdb_subtrees")),
 																  `VSpacing(1.5),
 																  `Left(`Frame(_("Search Scope"),
 																	   `RadioButtonGroup( `id(`rb),
 																		 `VBox(
-																			   `Left(`RadioButton(`id(`sub), _("subtree search"),
+																			   `Left(`RadioButton(`id(`sub), _("&subtree search"),
 																								  (KerberosServer::getKdbvalue("kdb_sscope") == "sub")?true:false)),
-																			   `Left(`RadioButton(`id(`one), _("one level"),
+																			   `Left(`RadioButton(`id(`one), _("&one level"),
 																								  (KerberosServer::getKdbvalue("kdb_sscope") == "sub")?false:true))
 																			  )))),
 																  `VSpacing(1.5),
@@ -1045,7 +1045,7 @@ define map itemMap = $[
 							],
 					   `kdb_containerref : $["name"   : _("Principal Container"),
 											 "widget" : `Frame ("",
-																`VBox(`TextEntry(`id(`id_kdb_containerref), "",
+																`VBox(`InputField(`id(`id_kdb_containerref), `opt(`hstretch), "",
 																				 KerberosServer::getKdbvalue("kdb_containerref")),
 																	  `VSpacing(1.5),
 																	  `RichText( HELPS["adv_kdb_containerref"]:"")
@@ -1058,12 +1058,12 @@ define map itemMap = $[
 										   "widget" : `Frame ("",
 															  `VBox(`Left(`CheckBox(`id(`id_kdb_maxtktlife_available), `opt(`notify),
 																					// checkbox text
-																					_("Available"), true)),
+																					_("&Available"), true)),
 																	`HBox(`IntField(`id(`id_kdb_maxtktlife_days),
-																					_("Days"),
+																					_("&Days"),
 																					0, 365, 0),
 																		  `Time(`id(`id_kdb_maxtktlife_time),
-																				_("Time"))
+																				_("&Time"))
 																		 ),
 																	`VSpacing(1.5),
 																	`RichText( HELPS["adv_kdb_maxtktlife"]:"")
@@ -1077,12 +1077,12 @@ define map itemMap = $[
 											 "widget" : `Frame ("",
 																`VBox(`Left(`CheckBox(`id(`id_kdb_maxrenewlife_available), `opt(`notify),
 																					  // checkbox text
-																					  _("Available"), true)),
+																					  _("&Available"), true)),
 																	  `HBox(`IntField(`id(`id_kdb_maxrenewlife_days),
-																					  _("Days"),
+																					  _("&Days"),
 																					  0, 365, 0),
 																			`Time(`id(`id_kdb_maxrenewlife_time),
-																				  _("Time"))
+																				  _("&Time"))
 																		   ),
 																	  `VSpacing(1.5),
 																	  `RichText( HELPS["adv_kdb_maxrenewlife"]:"")
@@ -1096,40 +1096,40 @@ define map itemMap = $[
 									  "widget" : `Frame ("",
 														 `VBox(`Left(`CheckBox(`id (`kdb_flags_allow_postdated),
 																			   // checkbox text in MultiSelectionBox
-																			   _("Allow postdated"), false)),
+																			   _("Allow p&ostdated"), false)),
 															   `Left(`CheckBox(`id (`kdb_flags_allow_forwardable),
 																			   // checkbox text in MultiSelectionBox
-																			   _("Allow forwardable"), false)),
+																			   _("Allow &forwardable"), false)),
 															   `Left(`CheckBox(`id (`kdb_flags_allow_renewable),
 																			   // checkbox text in MultiSelectionBox
-																			   _("Allow renewable"), false)),
+																			   _("Allow rene&wable"), false)),
 															   `Left(`CheckBox(`id (`kdb_flags_allow_proxiable),
 																			   // checkbox text in MultiSelectionBox
-																			   _("Allow proxiable"), false)),
+																			   _("Allow &proxiable"), false)),
 															   `Left(`CheckBox(`id (`kdb_flags_allow_dup_skey),
 																			   // checkbox text in MultiSelectionBox
-																			   _("Enable user-to-user authentication"), false)),
+																			   _("Enable &user-to-user authentication"), false)),
 															   `Left(`CheckBox(`id (`kdb_flags_requires_preauth),
 																			   // checkbox text in MultiSelectionBox
-																			   _("Requires preauth"), false)),
+																			   _("Requires pr&eauth"), false)),
 															   `Left(`CheckBox(`id (`kdb_flags_requires_hwauth),
 																			   // checkbox text in MultiSelectionBox
-																			   _("Requires hwauth"), false)),
+																			   _("Requires &hwauth"), false)),
 															   // checkbox text in MultiSelectionBox
 															   `Left(`CheckBox(`id (`kdb_flags_allow_svr),
-																			   _("Allow service"), false)),
+																			   _("Allow &service"), false)),
 															   `Left(`CheckBox(`id (`kdb_flags_allow_tgs_req),
 																			   // checkbox text in MultiSelectionBox
-																			   _("Allow tgs request"), false)),
+																			   _("Allow tgs re&quest"), false)),
 															   // checkbox text in MultiSelectionBox
 															   `Left(`CheckBox(`id (`kdb_flags_allow_tix),
-																			   _("Allow tickets"), false)),
+																			   _("Allow &tickets"), false)),
 															   `Left(`CheckBox(`id (`kdb_flags_needchange),
 																			   // checkbox text in MultiSelectionBox
-																			   _("Need change"), false)),
+																			   _("Need &change"), false)),
 															   `Left(`CheckBox(`id (`kdb_flags_password_changing_service),
 																			   // checkbox text in MultiSelectionBox
-																			   _("Password changing service"), false)),
+																			   _("P&assword changing service"), false)),
 															   `VSpacing(1.5),
 															   `RichText( HELPS["adv_default_principal_flags"]:"")
 															  )
