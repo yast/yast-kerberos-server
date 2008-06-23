@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------------------
- * Copyright (c) 2006 Novell, Inc. All Rights Reserved.
+ * Copyright (c) 2006, 2007, 2008 Novell, Inc. All Rights Reserved.
  *
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -24,7 +24,6 @@
  * Summary:	Dialogs definitions
  * Authors:	Michael Calmer <mc@novell.com>
  *
- * $Id: complex.ycp 29363 2006-03-24 08:20:43Z mzugec $
  */
 
 {
@@ -109,7 +108,7 @@ symbol AskDBtypeDialog() {
                         `RadioButtonGroup( `id(`rb), 
                           `VBox(
 								// Checkbox text
-								`Left (`RadioButton( `id( `file),    `opt (`notify), _("&Local Database"), true)),
+								`Left (`RadioButton( `id( `file),    `opt (`notify), _("&Local Database"))),
 								// Checkbox text
 								`Left (`RadioButton( `id( `newldap), `opt (`notify), _("&Set up new LDAP server as database back-end"))),
 								// Checkbox text
@@ -126,10 +125,33 @@ symbol AskDBtypeDialog() {
         Label::NextButton ()
     );
 
-	KerberosServer::setDBtype("file");
-	KerberosServer::setDBvalue("database_name", "/var/lib/kerberos/krb5kdc/principal");
-
     symbol ret = `file;
+	string type = KerberosServer::getDBtype();
+
+	if( type == nil || type == "")
+	{
+		KerberosServer::setDBtype("file");
+		KerberosServer::setDBvalue("database_name", "/var/lib/kerberos/krb5kdc/principal");
+		UI::ChangeWidget (`id (`file), `Value, true);
+	}
+	else if( type == "file" )
+	{
+		UI::ChangeWidget (`id (`file), `Value, true);
+	}
+	else if( type == "ldap" )
+	{
+		if(KerberosServer::getLdapUseExisting())
+		{
+			UI::ChangeWidget (`id (`useldap), `Value, true);
+			ret = `useldap;
+		}
+		else
+		{
+			UI::ChangeWidget (`id (`newldap), `Value, true);
+			ret = `newldap;
+		}
+	}
+
     while(true)
 	{
 		ret = (symbol) UI::UserInput();
@@ -181,6 +203,7 @@ symbol AskDBtypeDialog() {
 				y2error("unexpected selection.");
 				continue;
 			}
+			y2milestone("configuring kerberos database type: %1", ret);
 			break;
 		}
 		else {
@@ -222,7 +245,7 @@ symbol AskBasicDialog(boolean adv) {
 							 /* TextEntry label: "Realm" is a typical kerberos phrase.
 								Please think twice please before you translate this,
 								and check with kerberos.pot how it is translated there. */
-							 `TextEntry (`id (`realm), _("Realm"), KerberosServer::getDBrealm()),
+							 `InputField (`id (`realm), `opt(`hstretch), _("R&ealm"), KerberosServer::getDBrealm()),
 							 `Password  (`id (`pw1), `opt(`hstretch), Label::Password(), KerberosServer::getDBpassword()),
 							 `Password  (`id (`pw2), `opt(`hstretch), Label::ConfirmPassword(), KerberosServer::getDBpassword())
                        )
@@ -330,11 +353,11 @@ symbol AskLdapDialog(boolean init) {
 		KerberosServer::CalcDefaultLdapValues();
 	}
 	/* TextEntry label */
-	term ldapServerTl = `TextEntry (`id (`server), _("LDAP Server URI:"), KerberosServer::getLdapDBvalue("ldap_server"));
+	term ldapServerTl = `InputField (`id (`server), `opt(`hstretch), _("LDAP &Server URI:"), KerberosServer::getLdapDBvalue("ldap_server"));
 	term pwCheckbox1  = `Empty();
 	/* TextEntry label */
-	term kadmindnW = `TextEntry (`id (`kadmin), _("Kadmin Bind DN:"),
-								 KerberosServer::getLdapDBvalue("ldap_kadmind_dn"));
+	term kadmindnW = `InputField (`id (`kadmin), `opt(`hstretch), _("K&admin Bind DN:"),
+								  KerberosServer::getLdapDBvalue("ldap_kadmind_dn"));
 	term kadminpw1 = `HBox(`Password  (`id (`kadminpw1), `opt(`hstretch), Label::Password(), KerberosServer::getLdapKadmPw()),
 						   `HSpacing (3),
 						   `Password  (`id (`kadminpw2), `opt(`hstretch), Label::ConfirmPassword(), KerberosServer::getLdapKadmPw()));
@@ -352,7 +375,7 @@ symbol AskLdapDialog(boolean init) {
 		
 		pwCheckbox1 = `CheckBox( `id(`kdc_use_kdcpw), `opt (`notify),
 								// Checkbox text
-								_("Use previously entered password"), true);
+								_("Use prev&iously entered password"), true);
 	}
 	
     term content = `HBox ( `HSpacing (3), `VBox (
@@ -362,15 +385,15 @@ symbol AskLdapDialog(boolean init) {
 						 `VBox(
 							   ldapServerTl,
 							   /* TextEntry label */
-							   `TextEntry (`id (`basedn), _("LDAP base DN:"),
+							   `InputField (`id (`basedn), `opt(`hstretch), _("LDAP ba&se DN:"),
 										   KerberosServer::getLdapBaseDN()),
 							   /* TextEntry label */
-							   `TextEntry (`id (`container), _("Kerberos Container DN:"),
+							   `InputField (`id (`container), `opt(`hstretch), _("Kerberos &Container DN:"),
 										   KerberosServer::getLdapDBvalue("ldap_kerberos_container_dn")),
 							   `HBox(
 									 /* TextEntry label */
-									 `TextEntry (`id (`kdcadmin), _("KDC Bind DN:"),
-												 KerberosServer::getLdapDBvalue("ldap_kdc_dn")),
+									 `InputField (`id (`kdcadmin), `opt(`hstretch), _("K&DC Bind DN:"),
+												  KerberosServer::getLdapDBvalue("ldap_kdc_dn")),
 									 pwCheckbox1
 									),
 							   `HBox(
@@ -383,7 +406,7 @@ symbol AskLdapDialog(boolean init) {
 							  )
 								),
 						 /* Button text */
-						 `PushButton(`id(`advanced), _("Advanced Configuration"))
+						 `PushButton(`id(`advanced), _("Ad&vanced Configuration"))
 												)
 						 );
 
@@ -533,7 +556,7 @@ symbol AdvancedConfiguration(boolean ldap)
 										   `HBox(
 												 `HWeight (35,
 														   // tree widget label
-														   `Tree(`id(`tree), `opt(`notify, `vstretch), _("&Advanced Options"), itemList)
+														   `Tree(`id(`tree), `opt(`notify, `vstretch), _("Advanced &Options"), itemList)
 														  ),
 												 `HSpacing(1),
 												 `HWeight(65,
