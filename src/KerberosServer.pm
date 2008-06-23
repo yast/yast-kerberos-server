@@ -540,6 +540,8 @@ sub splitTime
     
     my $list = [];
     
+    y2milestone("SplitTime: $string");
+
     if($string =~ /(\d+\s)*(\d+):(\d+):(\d+)/)
     {
         if(defined $1)
@@ -954,13 +956,10 @@ sub SetupLdapClient
         return 0;
     }
     
-    if(!exists $data->{base_config_dn}  ||
-       !defined $data->{base_config_dn} ||
-       $data->{base_config_dn} eq "")
-    {
-        $data->{base_config_dn} = "ou=ldapconfig,".$ldapbasedn;
-    }
-    
+    # wee need to overwrite it. The value in the Ldap module might
+    # not match the basedn we use here.
+    $data->{base_config_dn} = "ou=ldapconfig,".$ldapbasedn;
+        
     $data->{ldap_domain}   = "$ldapbasedn"; # == basedn
     $data->{start_ldap}    = Boolean(1);
     #$data->{ldap_tls}      = Boolean(1);
@@ -1728,13 +1727,31 @@ sub ReadDatabase
            ! defined $db->{max_life} ||
            $db->{max_life} eq "")
         {
-            $db->{max_life} = "10h 0m 0s";
+            $db->{max_life} = $class->encodeTime("10h 0m 0s");
         }
         if(! exists $db->{max_renewable_life} ||
            ! defined $db->{max_renewable_life} ||
            $db->{max_renewable_life} eq "")
         {
-            $db->{max_renewable_life} = "7d 0h 0m 0s";
+            $db->{max_renewable_life} = $class->encodeTime("7d 0h 0m 0s");
+        }
+        if(! exists $db->{admin_keytab} ||
+           ! defined $db->{admin_keytab} || 
+           $db->{admin_keytab} eq "")
+        {
+            $db->{admin_keytab} = "FILE:/var/lib/kerberos/krb5kdc/kadm5.keytab";
+        }
+        if(! exists $db->{acl_file} ||
+           ! defined $db->{acl_file} || 
+           $db->{acl_file} eq "")
+        {
+            $db->{acl_file} = "/var/lib/kerberos/krb5kdc/kadm5.acl";
+        }
+        if((! exists $db->{dict_file} ||
+            ! defined $db->{dict_file} || 
+            $db->{dict_file} eq "") && -e "/var/lib/kerberos/krb5kdc/kadm5.dict")
+        {
+            $db->{dict_file} = "/var/lib/kerberos/krb5kdc/kadm5.dict";
         }
     }
 
@@ -2096,7 +2113,7 @@ sub WriteDatabase
 
             my @cmdArgs = ("create", "-r", "$dbrealm", "-s");
 
-            y2milestone("Command: /usr/lib/mit/sbin/kdb5_ldap_util ".join(" ",@cmdArgs));
+            y2milestone("Command: /usr/lib/mit/sbin/kdb5_util ".join(" ",@cmdArgs));
 
             my $pid = open3(\*IN, \*OUT, \*ERR, "/usr/lib/mit/sbin/kdb5_util", @cmdArgs)
             or do {
@@ -2128,7 +2145,7 @@ sub WriteDatabase
             if(defined $err && $err ne "")
             {
                 chomp($err);
-                y2error("Error during kdb5_ldap_util call: $err");
+                y2error("Error during kdb5_util call: $err");
             }
             my $code = ($?>>8);
             if($code != 0)
@@ -2610,15 +2627,18 @@ sub decodeDateTime
     my $class = shift;
     my $datetime = shift;
 
-    my $date = "";
-    my $time = "";
+    my $date = undef;
+    my $time = undef;
     # convert the datetime format   "yyyymmddhhmmss" => "yyy-mm-dd", "hh:mm:ss"
     if($datetime =~ /^\s*(\d\d\d\d)\.?(\d\d)\.?(\d\d)\.?(\d\d)\.?(\d\d)\.?(\d\d)\s*/)
     {
         $date = sprintf("%04d-%02d-%02d",$1, $2, $3);
         $time = sprintf("%02d:%02d:%02d",$4, $5, $6);
+
+        y2milestone("decodeDateTime returns: $date,$time");
+        return ["$date","$time"];
     }
-    return ["$date","$time"];
+    return [];
 }
 
 BEGIN { $TYPEINFO{encodeDateTime} = ["function", "string", "string", "string"]; }
