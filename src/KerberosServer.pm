@@ -484,7 +484,7 @@ my @ldapDBattributes = (
                         "ldap_kdc_dn",
                         "ldap_kadmind_dn",
                         "ldap_service_password_file",
-                        "ldap_server",
+                        "ldap_servers",
                         "ldap_conns_per_server",
                        );
 
@@ -927,21 +927,21 @@ sub SetupLdapClient
         $data->{$_} = Boolean(0) if("$data->{$_}" eq "0");
     }
 
-    if(exists $ldapdb->{ldap_server}  &&
-       defined $ldapdb->{ldap_server} &&
-       $ldapdb->{ldap_server} ne "")
+    if(exists $ldapdb->{ldap_servers}  &&
+       defined $ldapdb->{ldap_servers} &&
+       $ldapdb->{ldap_servers} ne "")
     {
-        my $uriParts = URL->Parse($ldapdb->{ldap_server});
+        my $uriParts = URL->Parse($ldapdb->{ldap_servers});
         
         if($uriParts->{scheme} eq "ldapi")
         {
             # local ldap server; use hostname and domain 
-            $data->{ldap_server} = "$hostname.$domain"; # == ldap server IP address or name
+            $data->{ldap_servers} = "$hostname.$domain"; # == ldap server IP address or name
         }
         elsif(($uriParts->{scheme} eq "ldaps" || $uriParts->{scheme} eq "ldap") && $uriParts->{host} ne "")
         {
             # local ldap server; use hostname and domain 
-            $data->{ldap_server} = $uriParts->{host}; # == ldap server IP address or name
+            $data->{ldap_servers} = $uriParts->{host}; # == ldap server IP address or name
         }
         else
         {
@@ -1074,7 +1074,7 @@ sub SetupLdapBackend
 
     my @cmdArgs = ();
     push @cmdArgs, "-D", $ldapdb->{ldap_kadmind_dn};
-    push @cmdArgs, "-H", $ldapdb->{ldap_server};
+    push @cmdArgs, "-H", $ldapdb->{ldap_servers};
     push @cmdArgs, "create";
     push @cmdArgs, "-sf", $db->{key_stash_file}, "-s";
     push @cmdArgs, "-r", $dbrealm;
@@ -1275,13 +1275,13 @@ sub ReadDefaultLdapValues
     {
         my $ldapMap = Ldap->Export();
             
-        if(!exists $ldapdb->{ldap_server} || !defined $ldapdb->{ldap_server} || $ldapdb->{ldap_server} eq "")
+        if(!exists $ldapdb->{ldap_servers} || !defined $ldapdb->{ldap_servers} || $ldapdb->{ldap_servers} eq "")
         {
-            if(defined $ldapMap->{'ldap_server'} && $ldapMap->{'ldap_server'} ne "") 
+            if(defined $ldapMap->{'ldap_servers'} && $ldapMap->{'ldap_servers'} ne "") 
             {
-                my $dummy = $ldapMap->{'ldap_server'};
+                my $dummy = $ldapMap->{'ldap_servers'};
                 
-                $ldapdb->{ldap_server} = "ldaps://".Ldap->GetFirstServer("$dummy");
+                $ldapdb->{ldap_servers} = "ldaps://".Ldap->GetFirstServer("$dummy");
             }
         }            
         
@@ -1347,21 +1347,21 @@ sub initLDAP
 
     Ldap->Read(); 
 
-    if(exists $ldapdb->{ldap_server} && defined $ldapdb->{ldap_server} && $ldapdb->{ldap_server} ne "")
+    if(exists $ldapdb->{ldap_servers} && defined $ldapdb->{ldap_servers} && $ldapdb->{ldap_servers} ne "")
     {
-        y2milestone("initLDAP: found ldap_server $ldapdb->{ldap_server}");
+        y2milestone("initLDAP: found ldap_servers $ldapdb->{ldap_servers}");
         
-        my $uriParts = URL->Parse($ldapdb->{ldap_server});
+        my $uriParts = URL->Parse($ldapdb->{ldap_servers});
 
         if($uriParts->{scheme} eq "ldapi")
         {
             # local ldap server; use hostname and domain
-            $ldapMap->{ldap_server} = "$hostname.$domain"; # == ldap server IP address or name
+            $ldapMap->{ldap_servers} = "$hostname.$domain"; # == ldap server IP address or name
         }
          elsif(($uriParts->{scheme} eq "ldaps" || $uriParts->{scheme} eq "ldap") && $uriParts->{host} ne "")
          {
              # local ldap server; use hostname and domain
-             $ldapMap->{ldap_server} = $uriParts->{host}; # == ldap server IP address or name
+             $ldapMap->{ldap_servers} = $uriParts->{host}; # == ldap server IP address or name
              $ldapMap->{ldap_port} = $uriParts->{port};
          }
          else
@@ -1379,7 +1379,7 @@ sub initLDAP
          }
     }     
    
-    if (! SCR->Execute(".ldap", {"hostname" => $ldapMap->{'ldap_server'},
+    if (! SCR->Execute(".ldap", {"hostname" => $ldapMap->{'ldap_servers'},
                                  "port"     => $ldapMap->{'ldap_port'},
                                  "use_tls"  => $use_tls })) 
     {
@@ -1899,7 +1899,7 @@ sub ModifyLdapEntries
 
     my @cmdArgs = ();
     push @cmdArgs, "-D", $ldapdb->{ldap_kadmind_dn};
-    push @cmdArgs, "-H", $ldapdb->{ldap_server};
+    push @cmdArgs, "-H", $ldapdb->{ldap_servers};
     push @cmdArgs, "modify";
     push @cmdArgs, "-r", $dbrealm;
 
@@ -2163,9 +2163,9 @@ sub WriteDatabase
             push @{$reqPackages}, "krb5-plugin-kdb-ldap";
             
             if(!$ldap_use_existing &&
-               exists $ldapdb->{ldap_server} &&
-               defined $ldapdb->{ldap_server} &&
-               $ldapdb->{ldap_server} eq "ldapi://")
+               exists $ldapdb->{ldap_servers} &&
+               defined $ldapdb->{ldap_servers} &&
+               $ldapdb->{ldap_servers} eq "ldapi://")
             {
                 push @{$reqPackages}, "yast2-ldap-server", "yast2-ca-management", "openldap2";
                 
@@ -2529,7 +2529,7 @@ sub Summary {
     if($dbtype eq "ldap")
     {
         # summary text 
-        $sum .= "<tr><td>".__("LDAP Server URI:")."</td><td>".$ldapdb->{ldap_server}."</td></tr>";
+        $sum .= "<tr><td>".__("LDAP Server URI:")."</td><td>".$ldapdb->{ldap_servers}."</td></tr>";
 
         # summary text 
         $sum .= "<tr><td>".__("Kerberos Container DN:")."</td><td>".$ldapdb->{ldap_kerberos_container_dn}."</td></tr>";

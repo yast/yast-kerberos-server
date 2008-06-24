@@ -353,7 +353,7 @@ symbol AskLdapDialog(boolean init) {
 		KerberosServer::CalcDefaultLdapValues();
 	}
 	/* TextEntry label */
-	term ldapServerTl = `InputField (`id (`server), `opt(`hstretch), _("LDAP &Server URI:"), KerberosServer::getLdapDBvalue("ldap_server"));
+	term ldapServerTl = `InputField (`id (`server), `opt(`hstretch), _("LDAP &Server URI:"), KerberosServer::getLdapDBvalue("ldap_servers"));
 	term pwCheckbox1  = `Empty();
 	/* TextEntry label */
 	term kadmindnW = `InputField (`id (`kadmin), `opt(`hstretch), _("K&admin Bind DN:"),
@@ -489,11 +489,11 @@ Try again."));
 
 			if(init)
 			{
-				KerberosServer::setLdapDBvalue("ldap_server", "ldapi://");
+				KerberosServer::setLdapDBvalue("ldap_servers", "ldapi://");
 			}
 			else
 			{
-				KerberosServer::setLdapDBvalue("ldap_server",
+				KerberosServer::setLdapDBvalue("ldap_servers",
 											   (string) UI::QueryWidget(`id(`server), `Value));
 			}
 			
