@@ -1260,7 +1260,7 @@ sub CalcDefaultLdapValues
        $ldapbasedn eq "")
     {
         $ldapbasedn = "dc=".join(",dc=", split(/\./, $domain));
-        $ldapdb->{ldap_kerberos_container_dn} = "cn=krbcontainer,".$ldapbasedn;
+        $ldapdb->{ldap_kerberos_container_dn} = "cn=krbContainer,".$ldapbasedn;
         $ldapdb->{ldap_kdc_dn} = "cn=Administrator,".$ldapbasedn;
         $ldapdb->{ldap_kadmind_dn} = "cn=Administrator,".$ldapbasedn;
     }
@@ -1299,7 +1299,7 @@ sub ReadDefaultLdapValues
         
         if(!exists $ldapdb->{ldap_kerberos_container_dn})
         {
-            $ldapdb->{ldap_kerberos_container_dn} = "cn=krbcontainer,".$ldapbasedn;
+            $ldapdb->{ldap_kerberos_container_dn} = "cn=krbContainer,".$ldapbasedn;
         }
         
         if(!exists $ldapdb->{ldap_kdc_dn})
@@ -1438,7 +1438,7 @@ sub ReadAttributesFromLDAP
     
     my $attr = SCR->Read(".ldap.search", {
                                           "base_dn" => $ldapdb->{ldap_kerberos_container_dn},
-                                          "filter" => "(& (objectclass=krbRealmContainer)(objectclass=krbTicketPolicyAux)(cn=$dbrealm))",
+                                          "filter" => "(& (objectClass=krbRealmContainer)(objectClass=krbTicketPolicyAux)(cn=$dbrealm))",
                                           "scope" => 2,
                                           "attrs" => [ "krbSubTrees", "krbSearchScope", "krbPrincContainerRef",
                                                        "krbMaxRenewableAge", "krbMaxTicketLife", "krbTicketFlags"]
@@ -1466,14 +1466,14 @@ sub ReadAttributesFromLDAP
         return 1;
     }
 
-    if(exists $attributes->{krbsubtrees} && defined $attributes->{krbsubtrees})
+    if(exists $attributes->{krbSubTrees} && defined $attributes->{krbSubTrees})
     {
-        $kdbvalues->{kdb_subtrees} = join(":", @{$attributes->{krbsubtrees}});
+        $kdbvalues->{kdb_subtrees} = join(":", @{$attributes->{krbSubTrees}});
     }
-    if(exists $attributes->{krbsearchscope} && defined $attributes->{krbsearchscope} &&
-       exists $attributes->{krbsearchscope}->[0] && defined $attributes->{krbsearchscope}->[0])
+    if(exists $attributes->{krbSearchScope} && defined $attributes->{krbSearchScope} &&
+       exists $attributes->{krbSearchScope}->[0] && defined $attributes->{krbSearchScope}->[0])
     {
-        if($attributes->{krbsearchscope}->[0] eq "1")
+        if($attributes->{krbSearchScope}->[0] eq "1")
         {
             $kdbvalues->{kdb_sscope} = "one";
         }
@@ -1482,17 +1482,17 @@ sub ReadAttributesFromLDAP
             $kdbvalues->{kdb_sscope} = "sub";
         }
     }
-    if(exists $attributes->{krbprinccontainerref} && defined $attributes->{krbprinccontainerref} &&
-       exists $attributes->{krbprinccontainerref}->[0] && defined $attributes->{krbprinccontainerref} &&
-       $attributes->{krbprinccontainerref} ne "")
+    if(exists $attributes->{krbPrincContainerRef} && defined $attributes->{krbPrincContainerRef} &&
+       exists $attributes->{krbPrincContainerRef}->[0] && defined $attributes->{krbPrincContainerRef} &&
+       $attributes->{krbPrincContainerRef} ne "")
     {
-        $kdbvalues->{kdb_containerref} = $attributes->{krbprinccontainerref};
+        $kdbvalues->{kdb_containerref} = $attributes->{krbPrincContainerRef};
     }
-    if(exists $attributes->{krbmaxrenewableage} && defined $attributes->{krbmaxrenewableage} &&
-       exists $attributes->{krbmaxrenewableage}->[0] && defined $attributes->{krbmaxrenewableage}->[0] &&
-       $attributes->{krbmaxrenewableage}->[0] ne "")
+    if(exists $attributes->{krbMaxRenewableAge} && defined $attributes->{krbMaxRenewableAge} &&
+       exists $attributes->{krbMaxRenewableAge}->[0] && defined $attributes->{krbMaxRenewableAge}->[0] &&
+       $attributes->{krbMaxRenewableAge}->[0] ne "")
     {
-        my $dur = $attributes->{krbmaxrenewableage}->[0];
+        my $dur = $attributes->{krbMaxRenewableAge}->[0];
         
         my ($sec,$min,$hour,$days);
         
@@ -1507,11 +1507,11 @@ sub ReadAttributesFromLDAP
 
         $kdbvalues->{kdb_maxrenewlife} = sprintf("%d %02d:%02d:%02d", $days, $hour, $min, $sec);
     }
-    if(exists $attributes->{krbmaxticketlife} && defined $attributes->{krbmaxticketlife} &&
-       exists $attributes->{krbmaxticketlife}->[0] && defined $attributes->{krbmaxticketlife}->[0] &&
-       $attributes->{krbmaxticketlife}->[0] ne "")
+    if(exists $attributes->{krbMaxTicketLife} && defined $attributes->{krbMaxTicketLife} &&
+       exists $attributes->{krbMaxTicketLife}->[0] && defined $attributes->{krbMaxTicketLife}->[0] &&
+       $attributes->{krbMaxTicketLife}->[0] ne "")
     {
-        my $dur = $attributes->{krbmaxticketlife}->[0];
+        my $dur = $attributes->{krbMaxTicketLife}->[0];
         my ($sec,$min,$hour,$days);
         
         $days = int($dur / (60*60*24));
@@ -1525,11 +1525,11 @@ sub ReadAttributesFromLDAP
         
         $kdbvalues->{kdb_maxtktlife} = sprintf("%d %02d:%02d:%02d", $days, $hour, $min, $sec);
     }
-    if(exists $attributes->{krbticketflags} && defined $attributes->{krbticketflags} &&
-       exists $attributes->{krbticketflags}->[0] && defined $attributes->{krbticketflags}->[0] &&
-       $attributes->{krbticketflags}->[0] ne "")
+    if(exists $attributes->{krbTicketFlags} && defined $attributes->{krbTicketFlags} &&
+       exists $attributes->{krbTicketFlags}->[0] && defined $attributes->{krbTicketFlags}->[0] &&
+       $attributes->{krbTicketFlags}->[0] ne "")
     {
-        my $flags = $attributes->{krbticketflags}->[0];
+        my $flags = $attributes->{krbTicketFlags}->[0];
    
         $kdbvalues->{kdb_flags} = $class->num2flags($flags);
     }
@@ -2002,7 +2002,7 @@ sub ModifyLdapEntries
         {
             my $DNs = SCR->Read(".ldap.search", {
                                                  "base_dn" => $ldapdb->{ldap_kerberos_container_dn},
-                                                 "filter" => "(& (objectclass=krbRealmContainer)(objectclass=krbTicketPolicyAux)(cn=$dbrealm)($attribute=*))",
+                                                 "filter" => "(& (objectClass=krbRealmContainer)(objectClass=krbTicketPolicyAux)(cn=$dbrealm)($attribute=*))",
                                                  "scope" => 2,
                                                  "attrs" => [$attribute],
                                                  "dn_only" => 1
