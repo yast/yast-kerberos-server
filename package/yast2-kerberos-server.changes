@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Aug 13 11:34:36 CEST 2008 - mc@suse.de
+
+- version 2.17.2
+- adapt SetupLdapServer function to new LdapServer API 
+
+-------------------------------------------------------------------
 Mon Aug 11 10:59:08 CEST 2008 - mc@suse.de
 
 - version 2.17.1
