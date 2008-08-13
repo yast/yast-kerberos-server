@@ -800,38 +800,40 @@ sub SetupLdapServer
     
     $ret = LdapServer->Read();
     
-    if(-e "/var/lib/ldap/__db.001")
+    if(LdapServer->SlapdConfChanged())
     {
         y2error("Database exists. Cannot create a new one.");
         $errorMsg = _("LDAP database already exists. Cannot create a new one.");
         return 0;
     }
-    my $directory = "/var/lib/ldap";
-
-
+    
     # enable ldapi:// interface
-    SCR->Write (".sysconfig.openldap.OPENLDAP_START_LDAPI", "yes");
+    #SCR->Write (".sysconfig.openldap.OPENLDAP_START_LDAPI", "yes");
+    #if (!SCR->Write (".sysconfig.openldap", undef))
+    #{
+    #    y2error ("error writing /etc/sysconfig/openldap");
+    #    $errorMsg = _("Cannot write <tt>/etc/sysconfig/openldap</tt> .");
+    #    return 0;
+    #}    
 
-    if (!SCR->Write (".sysconfig.openldap", undef))
-    {
-        y2error ("error writing /etc/sysconfig/openldap");
-        $errorMsg = _("Cannot write <tt>/etc/sysconfig/openldap</tt> .");
-        return 0;
-    }    
+    LdapServer->WriteProtocolListenerEnabled("ldapi", 1);
 
-    my $data = {
-                suffix => $ldapbasedn,
-                rootdn => $class->getLdapDBvalue("ldap_kdc_dn"),
-                passwd => $ldapkdcpw,
-                directory => $directory,
-                createdatabasedir => 1
-               };
-    $ret = LdapServer->AddDatabase($data);
+    my $data = LdapServer->CreateInitialDefaults();
+    
+    $data->{suffix} = $ldapbasedn;
+    $data->{rootdn} = $class->getLdapDBvalue("ldap_kdc_dn");
+    $data->{rootpw_clear} = $ldapkdcpw;
+    $data->{serviceEnabled} = 1;
+
+    $ret = LdapServer->SetInitialDefaults($data);
     if(! $ret)
     {
-        y2error("LdapServer => AddDatabase call failed");
+        y2error("LdapServer => SetInitialDefaults call failed");
         return 0;
     }
+    LdapServer->ReadFromDefaults();
+
+    #LdapServer->WriteLoglevels(["stats"]);
     
     if(! -e "/usr/share/doc/packages/krb5/kerberos.schema")
     {
@@ -841,64 +843,46 @@ sub SetupLdapServer
         return 0;
     }
 
-    LdapServer->WriteLoglevel(256);
+    my $schemas = LdapServer->ReadSchemaList();
     
-    my $schemas = LdapServer->ReadSchemaIncludeList();
-    
-    if( !grep( ($_ =~ /kerberos.schema/), @{$schemas}))
+    if( !grep( ($_ =~ /^kerberos$/), @{$schemas}))
     {
-        push @{$schemas}, "/usr/share/doc/packages/krb5/kerberos.schema";
-        $ret = LdapServer->WriteSchemaIncludeList($schemas);
+        $ret = LdapServer->AddSchemaToSchemaList("/usr/share/doc/packages/krb5/kerberos.schema");
         if(! $ret)
         {
-            y2error("LdapServer => WriteSchemaIncludeList call failed");
+            y2error("LdapServer => AddSchemaToSchemaList call failed");
             return 0;
         }
     }
     
-    $ret = LdapServer->WriteConfigureCommonServerCertificate(1);
+    $ret = LdapServer->WriteTlsConfigCommonCert();
     if(! $ret)
     {
-        y2error("LdapServer => WriteConfigureCommonServerCertificate call failed");
+        y2error("LdapServer => WriteTlsConfigCommonCert call failed");
         return 0;
     }
 
-    $ret = LdapServer->WriteServiceEnabled(1);
+    $ret = LdapServer->ChangeDatabaseIndex(1, {name => "krbPrincipalName", eq   => 1});
     if(! $ret)
     {
-        y2error("LdapServer => WriteServiceEnabled call failed");
+        y2error("LdapServer => ChangeDatabaseIndex call failed");
         return 0;
-    }
-    
+    }    
+
     $ret = LdapServer->Write();
     if(! $ret)
     {
         y2error("LdapServer => Write call failed");
         return 0;
     }
-    
 
-    $ret = YaPI::LdapServer->AddIndex( $ldapbasedn, {attr=>"krbPrincipalName",param=>"eq"} );
-    if(!defined $ret)
-    {
-        my $err = YaPI::LdapServer->Error();
-        y2error("AddIndex failed: ".Data::Dumper->Dump([$err]));
-        return 0;
-    }
-
-    $ret = YaPI::LdapServer->RecreateIndex( $ldapbasedn );
-    if(!defined $ret)
-    {
-        my $err = YaPI::LdapServer->Error();
-        y2error("RecreateIndex failed: ".Data::Dumper->Dump([$err]));
-        return 0;
-    }
-
-    if (!SCR->Write (".ldapserver.krb5ACLHack", "" ))
-    {
-        return 0;
-    }
-    YaPI::LdapServer->SwitchService(1);
+    #
+    # FIXME: need some new handling for this in LdapServer
+    #
+    #if (!SCR->Write (".ldapserver.krb5ACLHack", "" ))
+    #{
+    #    return 0;
+    #}
 
     return 1;
 }
