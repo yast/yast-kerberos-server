@@ -102,7 +102,7 @@ Only read access is required for this account.</p>
 
 	/* Help text: Use existing LDAP server 6/6 */
 	_("<p><big>Kadmin Bind DN</big> is the DN that Kadmind uses to authenticate to the LDAP server.
-This account needs also write access.</p>
+This account also needs write access.</p>
 "),
 
 	
@@ -113,8 +113,9 @@ This account needs also write access.</p>
 	_("<p>With <big>LDAP Base DN</big> you can change the base DN of the LDAP server.</p>") +
 
 	/* Help text: New LDAP server 3/6 */
-	_("<p>The <big>Kerberos Container DN</big> specify the container where the Kerberos server should create 
-the principals and other informational data by default.</p>") +
+	_("<p>The <big>Kerberos Container DN</big> specifies the container where the Kerberos server should create 
+the principals and other informational data by default.</p>
+") +
 
 	/* Help text: New LDAP server 4/6 */
 	_("<p><big>KDC Bind DN</big> is the DN for the administrator.</p>") +
@@ -152,7 +153,7 @@ as the KDC Master password is also used for the LDAP administrator.
 	"adv_default_principal_expiration" : _("<p>This absolute time specifies the default expiration date of principals created in this realm.</p>"),
 
 	/* advanced item help principal_flags 1/13 */
-	"adv_default_principal_flags" : _("<p>These flags specifie the default attributes of principals created in this realm.</p>") +
+	"adv_default_principal_flags" : _("<p>These flags specify the default attributes of the principal created in this realm.</p>") +
 
 	"<ul><li><b>"+_("Allow postdated")+"</b> "+
     /* advanced item help principal_flags 2/13 :Allow postdated*/
@@ -203,7 +204,7 @@ as the KDC Master password is also used for the LDAP administrator.
 	_("If this flag is enabled, it marks this principal as a password change service.  This should only be used in special cases, for example,  if a  user's  password  has  expired,  the user has to get tickets for that principal to be able to change it without going through the normal password authentication.")+"</li></ul>",
 
 	/* advanced item help : dict_file*/
-	"adv_dict_file" : _("<p>This string location of the dictionary file containing strings that are not allowed as passwords. If this tag is not set or if there is no policy assigned to the principal, no check will be done.</p>"),
+	"adv_dict_file" : _("<p>The string location of the dictionary file containing strings that are not allowed as passwords. If this tag is not set or if there is no policy assigned to the principal, no check will be done.</p>"),
 	
 	/* advanced item help : kadmind_port*/
 	"adv_kadmind_port" : _("<p>This port number specifies the port on which the kadmind daemon listens for this realm.</p>"),
@@ -229,7 +230,7 @@ as the KDC Master password is also used for the LDAP administrator.
 	"adv_max_renew_life" : _("<p>This delta time specifies the maximum time period that a ticket may be renewed for in this realm.</p>"),
 
 	/* advanced item help : supported_enctypes*/
-	"adv_supported_enctypes" : _("<p>A list of key:salt strings that specifies the default key/salt combinations of principals for this realm.</p>"),
+	"adv_supported_enctypes" : _("<p>A list of key/salt strings that specifies the default key/salt combinations of principals for this realm.</p>"),
 
 	/* advanced item help : kdc_supported_enctypes*/
 	"adv_kdc_supported_enctypes" : _("<p>Specifies the permitted key/salt combinations of principals for this realm.</p>"),
@@ -238,7 +239,7 @@ as the KDC Master password is also used for the LDAP administrator.
 	"adv_reject_bad_transit" : _("<p>Specifies whether or not the list of transited realms for cross-realm tickets should be checked against the transit path computed from the realm names and the [capaths] section of its krb5.conf file</p>"),
 	
 	/* advanced item help : ldap_conns_per_server*/
-	"adv_ldap_conns_per_server" : _("<p>This LDAP specific tag indicates the number of connections to be maintained via LDAP server.</p>"),
+	"adv_ldap_conns_per_server" : _("<p>This LDAP specific tag indicates the number of connections to be maintained via the LDAP server.</p>"),
 	
 	/* advanced item help : ldap_service_password_file*/
 	"adv_ldap_service_password_file" : _("<p>This LDAP specific tag indicates the file containing the stashed passwords for the objects used for starting the Kerberos servers.</p>"),
