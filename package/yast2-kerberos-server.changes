@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Sep 23 15:56:42 CEST 2008 - mc@suse.de
+
+- version 2.17.4
+- create a LDAP ACL for krbPrincipalKey,krbExtraData (bnc#429057)
+
+-------------------------------------------------------------------
 Wed Sep 10 15:55:49 CEST 2008 - mc@suse.de
 
 - version 2.17.3

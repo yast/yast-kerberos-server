@@ -869,20 +869,47 @@ sub SetupLdapServer
         return 0;
     }    
 
+    my $ldapacls = LdapServer->ReadDatabaseAcl(1);
+    my $found = 0;
+    foreach my $acl (@{$ldapacls})
+    {
+        if(exists $acl->{target}->{attrs} && defined $acl->{target}->{attrs} &&
+           $acl->{target}->{attrs} =~ /krbPrincipalKey/i)
+        {
+            $found = 1;
+            last;
+        }
+    }
+    
+    if(!$found)
+    {
+        my $krb5acl = {
+                       'target' => {
+                                    'attrs'  => "krbPrincipalKey,krbExtraData"
+                                   },
+                       'access' => [
+                                    {
+                                     'level' => 'none',
+                                     'type'  => '*'
+                                    }
+                                   ]
+                      };
+        unshift @{$ldapacls}, $krb5acl;
+        
+        $ret = LdapServer->ChangeDatabaseAcl(1, $ldapacls);
+        if(! $ret)
+        {
+            y2error("LdapServer => ChangeDatabaseAcl call failed");
+            return 0;
+        }
+    }
+    
     $ret = LdapServer->Write();
     if(! $ret)
     {
         y2error("LdapServer => Write call failed");
         return 0;
     }
-
-    #
-    # FIXME: need some new handling for this in LdapServer
-    #
-    #if (!SCR->Write (".ldapserver.krb5ACLHack", "" ))
-    #{
-    #    return 0;
-    #}
 
     return 1;
 }
