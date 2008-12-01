@@ -100,12 +100,11 @@ symbol AskDBtypeDialog() {
 
     /* caption */
     string caption = _("Select the Database Back-End");
-	
-	term content = `HVCenter(
-  				   `HVSquash(
+
+	term content = `HBox(`HSpacing (3),
 					  /* Button group label */
                       `Frame(_("Select the database back-end you want to use"),
-                        `RadioButtonGroup( `id(`rb), 
+                        `RadioButtonGroup( `id(`rb),
                           `VBox(
 								// Checkbox text
 								`Left (`RadioButton( `id( `file),    `opt (`notify), _("&Local Database"))),
@@ -115,8 +114,7 @@ symbol AskDBtypeDialog() {
 								`Left (`RadioButton( `id( `useldap), `opt (`notify), _("&Use existing LDAP server as database back-end")))
 							   )
 							 )
-							)
-						)
+							), `HSpacing (3)
                   );
 
     Wizard::SetContentsButtons (

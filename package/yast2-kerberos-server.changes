@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Dec  1 15:41:32 CET 2008 - mc@suse.de
+
+- version 2.17.5
+- resize groupbox to make longer translation texts possible
+  (bnc#447614) 
+
+-------------------------------------------------------------------
 Tue Sep 23 15:56:42 CEST 2008 - mc@suse.de
 
 - version 2.17.4
