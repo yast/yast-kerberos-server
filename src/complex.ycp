@@ -126,13 +126,7 @@ symbol AskDBtypeDialog() {
     symbol ret = `file;
 	string type = KerberosServer::getDBtype();
 
-	if( type == nil || type == "")
-	{
-		KerberosServer::setDBtype("file");
-		KerberosServer::setDBvalue("database_name", "/var/lib/kerberos/krb5kdc/principal");
-		UI::ChangeWidget (`id (`file), `Value, true);
-	}
-	else if( type == "file" )
+        if( type == nil || type == "" || type == "file" )
 	{
 		UI::ChangeWidget (`id (`file), `Value, true);
 	}
@@ -153,7 +147,7 @@ symbol AskDBtypeDialog() {
     while(true)
 	{
 		ret = (symbol) UI::UserInput();
-		
+
 		/* abort? */
 		if(ret == `abort || ret == `cancel || ret == `back) {
 			if(ReallyAbort())
@@ -180,12 +174,14 @@ symbol AskDBtypeDialog() {
 			{
 				KerberosServer::setLdapUseExisting(true);
 			}
-			
+
 		}
 		else if(ret == `next)
 		{
 			if((boolean)UI::QueryWidget (`id( `file), `Value))
 			{
+				KerberosServer::setDBtype("file");
+				KerberosServer::setDBvalue("database_name", "/var/lib/kerberos/krb5kdc/principal");
 				ret = `file;
 			}
 			else if((boolean)UI::QueryWidget (`id( `newldap), `Value))
@@ -209,7 +205,7 @@ symbol AskDBtypeDialog() {
 			continue;
 		}
     }
-	
+
     return ret;
 }
 
