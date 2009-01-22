@@ -664,7 +664,7 @@ define list get_adv_itemlist() {
 	if(KerberosServer::getDBtype() == "file")
 	{
 		// Treeview list item
-		itemlist = add(itemlist, `item(`id(`database_name),"Database Path"));
+		itemlist = add(itemlist, `item(`id(`database_name),_("Database Path")));
 	}
 	// Treeview list item
 	itemlist = add(itemlist, `item(`id(`acl_file), _("ACL File")));
