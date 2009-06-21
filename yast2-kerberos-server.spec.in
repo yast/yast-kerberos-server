@@ -9,7 +9,8 @@ BuildArchitectures:	noarch
 Summary:	YaST2 - Kerberos Server Configuration
 
 %description
--
+Provides basic configuration of a Kerberos server over the YaST2
+Control Center.
 
 @PREP@
 
