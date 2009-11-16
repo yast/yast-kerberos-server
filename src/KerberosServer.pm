@@ -2369,7 +2369,7 @@ sub Read
     }
     
     $hostname = `/bin/hostname`;
-    if($?)
+    if($? || ! defined $hostname || $hostname eq "")
     {
         y2error("Cannot read hostname");
         $errorMsg = _("Cannot read hostname.");
@@ -2379,7 +2379,7 @@ sub Read
     chomp($hostname);
     
     $domain = `/bin/hostname --domain`;
-    if($?)
+    if($? || ! defined $domain || $domain eq "")
     {
         y2error("Cannot read domain");
         $errorMsg = _("Cannot read domain.");
