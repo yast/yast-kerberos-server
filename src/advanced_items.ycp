@@ -790,10 +790,8 @@ define map itemMap = $[
 																			`VBox(`Left(`CheckBox(`id(`id_default_principal_expiration_available), `opt(`notify),
 																								  // checkbox text
 																								  _("&Available"), true)),
-																				  `HBox(`Date(`id(`id_default_principal_expiration_date),
-																							  _("&Date")),
-																						`Time(`id(`id_default_principal_expiration_time),
-																							  _("&Time"))
+																				  `HBox( ( (UI::HasSpecialWidget (`Date) == true)?`Date(`id(`id_default_principal_expiration_date), _("&Date")):`InputField(`id(`id_default_principal_expiration_date), `opt(`hstretch), _("&Date"), "") ),
+																						( (UI::HasSpecialWidget (`Time) == true)?`Time(`id(`id_default_principal_expiration_time), _("&Time")):`InputField(`id(`id_default_principal_expiration_time), `opt(`hstretch), _("&Time"), "") )
 																					   ),
 																				  /*
 
@@ -938,8 +936,7 @@ define map itemMap = $[
 															  `HBox(`IntField(`id(`id_max_life_days),
 																			  _("&Days"),
 																			  0, 365, 0),
-																	`Time(`id(`id_max_life_time),
-																		  _("&Time"))
+                                                                    ( (UI::HasSpecialWidget (`Time) == true)?`Time(`id(`id_max_life_time), _("&Time")):`InputField(`id(`id_max_life_time), `opt(`hstretch), _("&Time"), "") )
 																   ),
 															  `VSpacing(1.5),
 															  `RichText( HELPS["adv_max_life"]:"")
@@ -957,8 +954,7 @@ define map itemMap = $[
 																		`HBox(`IntField(`id(`id_max_renewable_life_days),
 																						_("&Days"),
 																						0, 365, 0),
-																			  `Time(`id(`id_max_renewable_life_time),
-																					_("&Time"))
+                                                                              ( (UI::HasSpecialWidget (`Time) == true)?`Time(`id(`id_max_renewable_life_time), _("&Time")):`InputField(`id(`id_max_renewable_life_time), `opt(`hstretch), _("&Time"), "") )
 																			 ),
 																		`VSpacing(1.5),
 																		`RichText( HELPS["adv_max_renew_life"]:"")
@@ -1062,8 +1058,7 @@ define map itemMap = $[
 																	`HBox(`IntField(`id(`id_kdb_maxtktlife_days),
 																					_("&Days"),
 																					0, 365, 0),
-																		  `Time(`id(`id_kdb_maxtktlife_time),
-																				_("&Time"))
+                                                                          ( (UI::HasSpecialWidget (`Time) == true)?`Time(`id(`id_kdb_maxtktlife_time), _("&Time")):`InputField(`id(`id_kdb_maxtktlife_time), `opt(`hstretch), _("&Time"), "") )
 																		 ),
 																	`VSpacing(1.5),
 																	`RichText( HELPS["adv_kdb_maxtktlife"]:"")
@@ -1081,8 +1076,7 @@ define map itemMap = $[
 																	  `HBox(`IntField(`id(`id_kdb_maxrenewlife_days),
 																					  _("&Days"),
 																					  0, 365, 0),
-																			`Time(`id(`id_kdb_maxrenewlife_time),
-																				  _("&Time"))
+                                                                          ( (UI::HasSpecialWidget (`Time) == true)?`Time(`id(`id_kdb_maxrenewlife_time), _("&Time")):`InputField(`id(`id_kdb_maxrenewlife_time), `opt(`hstretch), _("&Time"), "") )
 																		   ),
 																	  `VSpacing(1.5),
 																	  `RichText( HELPS["adv_kdb_maxrenewlife"]:"")
