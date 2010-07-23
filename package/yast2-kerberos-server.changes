@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Jul 23 11:08:18 CEST 2010 - mc@suse.de
+
+- fix LDAP based Kerberos Server configuration fails with TLS error
+  (bnc#619549) 
+
+-------------------------------------------------------------------
 Mon Nov 16 11:54:21 CET 2009 - mc@suse.de
 
 - Use InputField, where `Time and `Date do not exist
