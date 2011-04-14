@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Apr 14 11:42:09 CEST 2011 - mc@suse.de
+
+- version 2.20.0
+- submit fixes below for 11.4 (bnc#684475)
+
+-------------------------------------------------------------------
 Fri Jul 23 11:17:31 CEST 2010 - mc@suse.de
 
 - fix LDAP based Kerberos Server configuration fails with TLS error
