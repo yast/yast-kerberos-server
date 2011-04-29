@@ -947,12 +947,12 @@ sub SetupLdapClient
         if($uriParts->{scheme} eq "ldapi")
         {
             # local ldap server; use hostname and domain 
-            $data->{ldap_servers} = "$hostname.$domain"; # == ldap server IP address or name
+            $data->{ldap_server} = "$hostname.$domain"; # == ldap server IP address or name
         }
         elsif(($uriParts->{scheme} eq "ldaps" || $uriParts->{scheme} eq "ldap") && $uriParts->{host} ne "")
         {
             # local ldap server; use hostname and domain 
-            $data->{ldap_servers} = $uriParts->{host}; # == ldap server IP address or name
+            $data->{ldap_server} = $uriParts->{host}; # == ldap server IP address or name
         }
         else
         {
