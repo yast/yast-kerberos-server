@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Sep 21 10:26:15 CEST 2011 - mc@suse.de
+
+- 2.21.2
+- fix License in spec file
+
+-------------------------------------------------------------------
 Mon Sep 19 14:45:37 CEST 2011 - visnov@suse.cz
 
 - remove dependency on Wizard_hw
