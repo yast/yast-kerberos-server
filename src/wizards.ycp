@@ -161,6 +161,7 @@ any KerberosServerSequence()
 					];
 	
     Wizard::CreateDialog();
+    Wizard::SetDesktopTitleAndIcon("kerberos-server");
 
     any ret = Sequencer::Run(aliases, sequence);
 	
@@ -181,6 +182,7 @@ any KerberosServerAutoSequence() {
     term contents = `Label(_("Initializing..."));
 	
     Wizard::CreateDialog();
+    Wizard::SetDesktopTitleAndIcon("kerberos-server");
     Wizard::SetContentsButtons(caption, contents, "",
 							   Label::BackButton(), Label::NextButton());
 	
