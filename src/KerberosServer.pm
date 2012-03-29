@@ -838,7 +838,7 @@ sub SetupLdapServer
     if(! -e "/usr/share/doc/packages/krb5/kerberos.schema")
     {
         y2error("Kerberos schema file not found");
-        $errorMsg = _("Kerberos schema file not found");
+        $errorMsg = _("Kerberos schema file not found.");
         $errorDetails = "/usr/share/doc/packages/krb5/kerberos.schema not found.";
         return 0;
     }
@@ -1122,7 +1122,7 @@ sub SetupLdapBackend
     my $pid = open3(\*IN, \*OUT, \*ERR, "/usr/lib/mit/sbin/kdb5_ldap_util", @cmdArgs)
     or do {
         y2error("Can not execute kdb5_ldap_util: $!");
-        $errorMsg = _("Cannot execute kdb5_ldap_util .");
+        $errorMsg = _("Cannot execute kdb5_ldap_util.");
         $errorDetails = "$!";
         return 0;
     };
@@ -1170,7 +1170,7 @@ sub SetupLdapBackend
     $pid = open3(\*IN, \*OUT, \*ERR, "/usr/lib/mit/sbin/kdb5_ldap_util", @cmdArgs)
     or do {
         y2error("Can not execute kdb5_ldap_util: $!");
-        $errorMsg = _("Cannot execute kdb5_ldap_util .");
+        $errorMsg = _("Cannot execute kdb5_ldap_util.");
         $errorDetails = "$!";
         return 0;
     };
@@ -1219,7 +1219,7 @@ sub SetupLdapBackend
         $pid = open3(\*IN, \*OUT, \*ERR, "/usr/lib/mit/sbin/kdb5_ldap_util", @cmdArgs)
         or do {
             y2error("Can not execute kdb5_ldap_util: $!");
-            $errorMsg = _("Cannot execute kdb5_ldap_util .");
+            $errorMsg = _("Cannot execute kdb5_ldap_util.");
             $errorDetails = "$!";
             return 0;
         };
@@ -1962,7 +1962,7 @@ sub ModifyLdapEntries
     my $pid = open3(\*IN, \*OUT, \*ERR, "/usr/lib/mit/sbin/kdb5_ldap_util", @cmdArgs)
     or do {
         y2error("Cannot execute kdb5_ldap_util: $!");
-        $errorMsg = _("Cannot execute kdb5_ldap_util .");
+        $errorMsg = _("Cannot execute kdb5_ldap_util.");
         $errorDetails = "$!";
         return 0;
     };
@@ -2129,7 +2129,7 @@ sub WriteDatabase
             my $pid = open3(\*IN, \*OUT, \*ERR, "/usr/lib/mit/sbin/kdb5_util", @cmdArgs)
             or do {
                 y2error("Can not execute kdb5_util: $!");
-                $errorMsg = _("Cannot execute kdb5_util .");
+                $errorMsg = _("Cannot execute kdb5_util.");
                 $errorDetails = "$!";
                 return 0;
             };
@@ -2324,7 +2324,7 @@ sub Read
     
 
     # KerberosServer read dialog caption
-    my $caption = __("Initializing Kerberos server configuration");
+    my $caption = __("Initializing Kerberos Server Configuration");
 
     my $steps = 2;
 
@@ -2421,7 +2421,7 @@ sub Write
     $errorDetails = "";
 
     # KerberosServer read dialog caption
-    my $caption = __("Saving Kerberos server configuration");
+    my $caption = __("Saving Kerberos Server Configuration");
 
     my $steps = 2;
 

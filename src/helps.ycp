@@ -38,7 +38,7 @@ map HELPS = $[
 
     /* Read dialog help 1/2 */
     "read" : _("<p><b><big>Initializing Kerberos Server Configuration</big></b><br>
-Please wait...<br></p>
+</p>
 ") +
 
     /* Read dialog help 2/2 */
@@ -48,7 +48,7 @@ Safely abort the configuration utility by pressing <b>Abort</b> now.</p>
 
     /* Write dialog help 1/2 */
     "write" : _("<p><b><big>Saving Kerberos Server Configuration</big></b><br>
-Please wait...<br></p>
+</p>
 ") +
 
     /* Write dialog help 2/2 */
@@ -58,7 +58,7 @@ An additional dialog informs whether it is safe to do so.
 </p>
 "),
 	/* Help text: ask for database backend 1/4 */
-	"AskDBtype" : _("<p>Here you specify where the Kerberos server should store the data.</p>") +
+	"AskDBtype" : _("<p>Specify where the Kerberos server should store the data.</p>") +
 
 	/* Help text: ask for database backend 2/4 */
 	_("<p><big>Local Database</big> will create a local database for storing the credentials.</p>") + 
@@ -69,13 +69,13 @@ on this machine and use it as database back-end.</p>
 ") + 
 
 	/* Help text: ask for database backend 4/4 */
-	_("<p><big>Use Existing LDAP Server as Database Back-End</big> gives you the possibility 
-to use an external LDAP server as database back-end.</p>
+	_("<p><big>Use Existing LDAP Server as Database Back-End</big> gives you the
+option to use an external LDAP server as database back-end.</p>
 "),
 
 
 	/* Help text: basic settings 1/2 */
-	"basic" : _("<p>Here you can specify the <big>Realm</big> and the <big>Master Password</big> for your Kerberos server.</p>") +
+	"basic" : _("<p>Specify the <big>Realm</big> and the <big>Master Password</big> for your Kerberos server.</p>") +
 
 	/* Help text: basic settings 2/2 */
 	_("<p>Although your Kerberos realm can be any ASCII string, the convention is to use upper-case letters as in your domain name.</p>
@@ -86,7 +86,7 @@ to use an external LDAP server as database back-end.</p>
 	"useldap" : _("<p>In this dialog, edit some parameters for the LDAP server.</p>") +
 
 	/* Help text: Use existing LDAP server 2/6 */
-	_("<p><big>LDAP Server URI</big> specify the location of the LDAP server.For example,<tt>ldaps://host.domain.com</tt> .</p>") +
+	_("<p>With <big>LDAP Server URI</big> specify the location of the LDAP\nserver. For example, <tt>ldaps://host.domain.com</tt>.</p>") +
 	
 	/* Help text: Use existing LDAP server 3/6 */
 	_("<p>With <big>LDAP Base DN</big> you can change the base DN of the LDAP server.</p>") +
@@ -144,7 +144,7 @@ as the KDC Master password is also used for the LDAP administrator.
 	"adv_database_name" : _("<p>This string specifies the location of the Kerberos database for this realm.</p>"),
 
     /* advanced item help: acl_file*/
-	"adv_acl_file" : _("<p>This string specifies the location of the access control list (acl) file that kadmin uses to determine the principals' permissions on the database.</p>"),
+	"adv_acl_file" : _("<p>This string specifies the location of the access control list (ACL) file that kadmin uses to determine the principals' permissions on the database.</p>"),
 	
 	/* advanced item help: admin_keytab */
 	"adv_admin_keytab" : _("<p>This string specifies the location of the keytab file that kadmin uses to authenticate to the database.</p>"),
@@ -242,7 +242,7 @@ as the KDC Master password is also used for the LDAP administrator.
 	"adv_ldap_conns_per_server" : _("<p>This LDAP specific tag indicates the number of connections to be maintained via the LDAP server.</p>"),
 	
 	/* advanced item help : ldap_service_password_file*/
-	"adv_ldap_service_password_file" : _("<p>This LDAP specific tag indicates the file containing the stashed passwords for the objects used for starting the Kerberos servers.</p>"),
+	"adv_ldap_service_password_file" : _("<p>This LDAP-specific tag indicates the file containing the stashed passwords for the objects used for starting the Kerberos servers.</p>"),
 	
 	/* advanced item help : kdb_subtrees*/
 	"adv_kdb_subtrees" : _("<p>Specifies the list of subtrees containing the principals of a realm. The list contains the DNs of the subtree objects separated by colon(:).</p><p>The search scope specifies the scope for searching the principals under the subtree.</p>"),
