@@ -790,8 +790,8 @@ define map itemMap = $[
 																			`VBox(`Left(`CheckBox(`id(`id_default_principal_expiration_available), `opt(`notify),
 																								  // checkbox text
 																								  _("&Available"), true)),
-																				  `HBox( ( (UI::HasSpecialWidget (`Date) == true)?`Date(`id(`id_default_principal_expiration_date), _("&Date")):`InputField(`id(`id_default_principal_expiration_date), `opt(`hstretch), _("&Date"), "") ),
-																						( (UI::HasSpecialWidget (`Time) == true)?`Time(`id(`id_default_principal_expiration_time), _("&Time")):`InputField(`id(`id_default_principal_expiration_time), `opt(`hstretch), _("&Time"), "") )
+																				  `HBox( ( (UI::HasSpecialWidget (`DateField) == true)?`DateField(`id(`id_default_principal_expiration_date), _("&Date")):`InputField(`id(`id_default_principal_expiration_date), `opt(`hstretch), _("&Date"), "") ),
+																						( (UI::HasSpecialWidget (`TimeField) == true)?`TimeField(`id(`id_default_principal_expiration_time), _("&Time")):`InputField(`id(`id_default_principal_expiration_time), `opt(`hstretch), _("&Time"), "") )
 																					   ),
 																				  /*
 																					 
