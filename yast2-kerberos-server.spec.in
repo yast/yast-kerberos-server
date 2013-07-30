@@ -10,6 +10,8 @@ BuildRequires:	perl-XML-Writer update-desktop-files yast2 yast2-devtools yast2-t
 
 BuildArchitectures:	noarch
 
+Requires:       yast2-ruby-bindings >= 1.0.0
+
 Summary:	YaST2 - Kerberos Server Configuration
 
 %description
@@ -28,7 +30,7 @@ Control Center.
 %defattr(-,root,root)
 %dir @yncludedir@/kerberos-server
 @yncludedir@/kerberos-server/*
-@clientdir@/kerberos-server.ycp
+@clientdir@/kerberos-server.rb
 @moduledir@/KerberosServer.*
 @desktopdir@/kerberos-server.desktop
 @scrconfdir@/*.scr
