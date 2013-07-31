@@ -1,27 +1,30 @@
-# Makefile.am for kerberos-server/src
+# Sources for kerberos-server
+
+module_DATA = \
+  modules/KerberosServer.pm
+
+client_DATA = \
+  clients/kerberos-server.rb
 
 yncludedir = @yncludedir@/kerberos-server
+ynclude_DATA = \
+  include/kerberos-server/wizards.rb \
+  include/kerberos-server/advanced_items.rb \
+  include/kerberos-server/complex.rb \
+  include/kerberos-server/helps.rb
 
-client_DATA =			\
-	kerberos-server.ycp		
+scrconf_DATA = \
+  scrconf/kdc_conf.scr \
+  scrconf/kadmin.scr \
+  scrconf/krb5_conf.scr
 
-ynclude_DATA =			\
-	helps.ycp		\
-	wizards.ycp		\
-	complex.ycp		\
-	advanced_items.ycp
+agent_SCRIPTS = \
+  servers_non_y2/ag_kadmin \
+  servers_non_y2/ag_kerberos
 
-desktop_DATA =			\
-	kerberos-server.desktop
+desktop_DATA = \
+  desktop/kerberos-server.desktop
 
-module_DATA =			\
-	KerberosServer.pm
-
-# create a symlink for local build, #145327
-kerberos-server:
-	ln -sf . $@
-ycpchook = kerberos-server
-
-EXTRA_DIST = $(client_DATA) $(ynclude_DATA) $(module_DATA) $(desktop_DATA)
+EXTRA_DIST = $(module_DATA) $(client_DATA) $(ynclude_DATA) $(scrconf_DATA) $(agent_SCRIPTS) $(desktop_DATA)
 
 include $(top_srcdir)/Makefile.am.common
