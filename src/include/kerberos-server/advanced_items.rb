@@ -399,8 +399,8 @@ module Yast
               ),
               HBox(
                 IntField(Id(:id_max_life_days), _("&Days"), 0, 365, 0),
-                UI.HasSpecialWidget(:Time) == true ?
-                  term(:Time, Id(:id_max_life_time), _("&Time")) :
+                UI.HasSpecialWidget(:TimeField) == true ?
+                  TimeField(Id(:id_max_life_time), _("&Time")) :
                   InputField(
                     Id(:id_max_life_time),
                     Opt(:hstretch),
@@ -432,8 +432,8 @@ module Yast
               ),
               HBox(
                 IntField(Id(:id_max_renewable_life_days), _("&Days"), 0, 365, 0),
-                UI.HasSpecialWidget(:Time) == true ?
-                  term(:Time, Id(:id_max_renewable_life_time), _("&Time")) :
+                UI.HasSpecialWidget(:TimeField) == true ?
+                  TimeField(Id(:id_max_renewable_life_time), _("&Time")) :
                   InputField(
                     Id(:id_max_renewable_life_time),
                     Opt(:hstretch),
@@ -618,8 +618,8 @@ module Yast
               ),
               HBox(
                 IntField(Id(:id_kdb_maxtktlife_days), _("&Days"), 0, 365, 0),
-                UI.HasSpecialWidget(:Time) == true ?
-                  term(:Time, Id(:id_kdb_maxtktlife_time), _("&Time")) :
+                UI.HasSpecialWidget(:TimeField) == true ?
+                  TimeField(Id(:id_kdb_maxtktlife_time), _("&Time")) :
                   InputField(
                     Id(:id_kdb_maxtktlife_time),
                     Opt(:hstretch),
@@ -651,8 +651,8 @@ module Yast
               ),
               HBox(
                 IntField(Id(:id_kdb_maxrenewlife_days), _("&Days"), 0, 365, 0),
-                UI.HasSpecialWidget(:Time) == true ?
-                  term(:Time, Id(:id_kdb_maxrenewlife_time), _("&Time")) :
+                UI.HasSpecialWidget(:TimeField) == true ?
+                  TimeField(Id(:id_kdb_maxrenewlife_time), _("&Time")) :
                   InputField(
                     Id(:id_kdb_maxrenewlife_time),
                     Opt(:hstretch),
