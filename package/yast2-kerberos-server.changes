@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Nov  5 14:41:35 UTC 2013 - jreidinger@suse.com
+
+- Replace deprecated Time widget with TimeField
+- 3.1.1
+
+-------------------------------------------------------------------
 Wed Sep 18 17:50:34 UTC 2013 - lslezak@suse.cz
 
 - do not use *.spec.in template, use *.spec file with RPM macros
