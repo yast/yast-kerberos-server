@@ -29,7 +29,7 @@ License:        GPL-2.0
 Requires:       yast2 >= 2.21.22
 Requires:	yast2-ldap-client yast2-kerberos-client
 BuildRequires:	perl-XML-Writer update-desktop-files yast2 yast2-testsuite yast2-ldap-client
-BuildRequires:  yast2-devtools >= 3.0.6
+BuildRequires:  yast2-devtools >= 3.1.10
 
 BuildArchitectures:	noarch
 
